@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>测试滚动条</title>
+ <script src="js/jquery-3.2.1.min.js"></script>
+ <script src="js/jquery.slimscroll.min.js"></script>
+<style>
+.demo{
+max-height: 300px;
+width: 170px;
+height: 200px;
+/*border: 1px solid #008080;*/
+margin:0px auto;
+margin-top: 30px;
+overflow: hidden;
+}
+.li{
+list-style: none;
+height: 30px;
+width: 80px;
+border: 1px solid #008080;
+margin: 5px auto;
+}
+</style>
+</head>
+<body>
+<div class="demo">
+<div id="demo">
+<ul style="margin: 0;padding: 0;">
+<details>
+<summary><a title="测试滚动">测试滚动</a></summary>
+<ol class="dd-list" style="display: block;">
+<li class="li"><center>滚动1</center></li>
+<li class="li"><center>滚动2</center></li>
+<li class="li"><center>滚动3</center></li>
+<li class="li"><center>滚动4</center></li>
+<li class="li"><center>滚动5</center></li>
+<li class="li"><center>滚动6</center></li>
+<li class="li"><center>滚动7</center></li>
+<li class="li"><center>滚动8</center></li>
+<li class="li"><center>滚动9</center></li>
+</ol>
+</details>
+</ul>
+</div>
+</div>
+<script>
+function setScroll(){
+$("#demo").slimScroll({
+width: 'auto',
+height: 'auto',
+start: 'bottom', //默认滚动位置：top/bottom
+borderRadius: '0px', //滚动条圆角
+railBorderRadius: '0px',//轨道圆角
+disableFadeOut: false, //是否 鼠标经过可滚动区域时显示组件，离开时隐藏组件
+alwaysVisible: true, //是否 始终显示组件
+});
+}
+setScroll();
+//$(window).on("resize",setScroll);
+</script>
+</body>
+</html>

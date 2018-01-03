@@ -1,0 +1,129 @@
+//服务器间相关协议
+package toba.gm;  
+
+enum GMERRORNO
+{
+  //错误代码定义
+  GMERR_SUCCESS				= 1000;  //成功
+  GMERR_DB_ERROR			= 1001;  //数据库
+  GMERR_HASLOGIN_ERROR		= 1002;  //已经登陆
+  GMERR_PASSWORD_ERROR		= 1003;  //密码错误
+  GMERR_NOLOGIN_ERROR		= 1004;  //GM没有登陆
+  GMERR_MAILTYPE_ERROR		= 1005;  //错误邮件类型
+  GMERR_NICKNAME_ERROR		= 1006;  // 帐号不能为空
+  GMERR_ACCOUNT_ERROR		= 1007;  //账号不存在
+  GMERR_ACTIVITYID_ERROR	= 1008;  //活动id不存在
+  GMERR_ACTIVITY_RUNNING_ERROR	= 1009;  //活动进行中不能修改时间
+  GMERR_ACTIVITY_PARAMS_ERROR	= 1010;  //活动参数错误
+  GMERR_NULL_ACCOUNT_ERROR	= 1011;  // 发邮件时，玩家帐号不存在
+  GMERR_SERVER_ERROR = 1012;			//服务器未开放
+  GMERR_NOTGM_ERROR = 1013;			// 登录的不是GM帐号
+} 
+
+enum MSG
+{
+  Gm_Login_Request    = 8001;
+  Gm_Login_Response   = 8501;
+
+  Gm_SendMail_Request  = 8002;
+  Gm_SendMail_Response = 8502;
+
+  Gm_GetServerList_Request  = 8003;
+  Gm_GetServerList_Response = 8503;
+
+  Gm_ChangeActivity_Request  = 8010;
+  Gm_ChangeActivity_Response = 8510;
+}
+
+// 活动类型
+enum ACTIVITYTYPE
+{
+	AT_CELEBRATION		= 1; // 庆典
+}
+
+//GM邮件属性
+message MailInfo 
+{
+  optional int32 gmmailtype = 1;  //1:表示单人补偿,2:表示在线玩家通告,3:表示全服补偿
+  optional string accountname = 2;   //gmmailtype为1时 accountname表示邮件接收者昵称 
+  optional int64 starttime = 3;  // 时间
+  optional int64 endtime = 4;    // 时间
+  optional string title = 5;     // 标题
+  optional string content = 6;   // 内容
+  optional string award = 7;     // 奖励信息
+  optional string signature = 8; // 公告时署名
+}
+
+message GmLoginRequest 
+{
+  required string struser = 1;
+  required string strpassword = 2;
+}
+
+message GmLoginResponse 
+{
+  required int32 returncode = 1;
+}
+
+message GmSendMailRequest 
+{
+  required MailInfo mailinfo = 1;
+}
+
+message GmSendMailResponse 
+{
+  required int32 returncode = 1;
+}
+
+// 活动通用配置属性
+message ActivityInfo 
+{
+	required uint32 id			= 1; // 活动id
+	required ACTIVITYTYPE type	= 2; // 活动类型，只能选择已经开发出来的活动类型
+	required int64 starttime	= 3; // 开始时间
+	required int64 endtime		= 4; // 结束时间
+	required int64 stoptime		= 5; // 停留时间
+	required string name		= 6; // 活动标题
+	required string des			= 7; // 活动内容
+	required string params		= 8; // 活动参数（每个活动参数可能都不一样，需要商定参数数量和格式）
+}
+
+enum ServerStatus
+{
+	SS_ONLINE	= 1; // 在线
+	SS_OFFLINE	= 2; // 离线
+}
+
+message ServerInfos
+{
+	// 服务器名称
+	required string servername			= 1;
+	// 服务器状态
+	required ServerStatus status		= 2;
+	// 活动列表
+	repeated ActivityInfo activitylist	= 3;
+}
+
+message GmGetServerListRequest
+{
+}
+
+message GmGetServerListResponse
+{
+	required int32 returncode		= 1;
+	// 当前在线的游戏服列表
+	repeated ServerInfos serverlist	= 2;
+}
+
+message GmChangeActivityRequest
+{
+	// 需要修改活动的服务器名称
+	required string servername			= 1;
+	// 新的活动配置
+	repeated ActivityInfo activityinfo	= 2;
+}
+
+message GmChangeActivityResponse
+{
+	required int32 returncode	= 1;
+}

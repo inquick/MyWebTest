@@ -1,0 +1,22 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title> jquery demo </title>
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript">
+    function show(){
+        $.get( "server.php", function(data) {
+            $('#txt').html(data);
+        });
+    }
+  </script>
+ 
+ </head>
+ 
+ <body>
+    <p>這裡不會被刷新</p>
+    <div id="txt">原來內容</div>
+    <input type="button" value="刷新內容" onclick="show()">
+ </body>
+</html>

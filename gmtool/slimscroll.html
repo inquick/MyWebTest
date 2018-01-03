@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>slimScroll插件使用例子</title>
+</head>
+<body>
+  
+ <div class="superDiv"> 
+  <div id="innerDiv"> 
+   <p>xxxxxxxxxxxxxx</p> 
+  </div> 
+ </div> 
+  
+ <script src="js/jquery-3.2.1.min.js"></script>
+ <script src="js/jquery.slimscroll.min.js"></script>
+ <script>
+  
+  $(function(){ 
+   $('#innerDiv').slimScroll({ 
+    height: '250px' 
+   });
+    
+   $('#innerDiv').slimScroll().bind('slimscroll', function(e, pos){ 
+    if(pos=='bottom'){
+     // 执行其他逻辑
+    }
+   }); 
+  }); 
+   
+ </script>
+</body>
+</html>
