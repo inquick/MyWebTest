@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>抓取网页小说</title>
+<script>    
+    function smt(){    
+        path = prompt("Please Input Path","");   
+    }     
+</script> 
+</head>
+<body>
+   <form action="book.php" method="GET">
+		小说第一章网址
+		<br>
+		<input type="text" name="bookurl" />
+		<br>
+		<input type="file" name="savepath"/>
+		<br>
+		<input type="submit" value="开始抓取">
+   </form>
+</body>
+</html>

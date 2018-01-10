@@ -12,7 +12,8 @@ width: 170px;
 height: 200px;
 /*border: 1px solid #008080;*/
 margin:0px auto;
-margin-top: 30px;
+margin-left: 5px;
+margin-top: 10px;
 overflow: hidden;
 }
 .li{
@@ -21,29 +22,30 @@ height: 30px;
 width: 80px;
 border: 1px solid #008080;
 margin: 5px auto;
+margin-left: 0px;
 }
 </style>
 </head>
 <body>
-<div class="demo">
-<div id="demo">
-<ul style="margin: 0;padding: 0;">
-<details>
-<summary><a title="测试滚动">测试滚动</a></summary>
-<ol class="dd-list" style="display: block;">
-<li class="li"><center>滚动1</center></li>
-<li class="li"><center>滚动2</center></li>
-<li class="li"><center>滚动3</center></li>
-<li class="li"><center>滚动4</center></li>
-<li class="li"><center>滚动5</center></li>
-<li class="li"><center>滚动6</center></li>
-<li class="li"><center>滚动7</center></li>
-<li class="li"><center>滚动8</center></li>
-<li class="li"><center>滚动9</center></li>
-</ol>
-</details>
-</ul>
-</div>
+<div class="left-container" style="border-right:2px solid #ccc; float:left; width:180px;">
+	<div class="demo" id="demo">
+		<ul style="margin: 0;padding: 0;">
+		<details>
+		<summary><a title="测试滚动"><b>测试滚动</b></a></summary>
+			<ol class="dd-list" style="display: block;">
+			<li class="li"><center>滚动1</center></li>
+			<li class="li"><center>滚动2</center></li>
+			<li class="li"><center>滚动3</center></li>
+			<li class="li"><center>滚动4</center></li>
+			<li class="li"><center>滚动5</center></li>
+			<li class="li"><center>滚动6</center></li>
+			<li class="li"><center>滚动7</center></li>
+			<li class="li"><center>滚动8</center></li>
+			<li class="li"><center>滚动9</center></li>
+			</ol>
+		</details>
+		</ul>
+	</div>
 </div>
 <script>
 function setScroll(){
@@ -53,12 +55,12 @@ height: 'auto',
 start: 'bottom', //默认滚动位置：top/bottom
 borderRadius: '0px', //滚动条圆角
 railBorderRadius: '0px',//轨道圆角
-disableFadeOut: false, //是否 鼠标经过可滚动区域时显示组件，离开时隐藏组件
-alwaysVisible: true, //是否 始终显示组件
+disableFadeOut: true, //是否 鼠标经过可滚动区域时显示组件，离开时隐藏组件
+alwaysVisible: false, //是否 始终显示组件
 });
 }
 setScroll();
-//$(window).on("resize",setScroll);
+$(window).on("resize",setScroll);
 </script>
 </body>
 </html>

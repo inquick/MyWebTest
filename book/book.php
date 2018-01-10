@@ -1,10 +1,19 @@
-﻿<?php
+﻿
+<?php
 
 set_time_limit(0);
 
-$myrul = 'https://m.xiashu.cc/56196/read_1.html';
+if (empty($_GET['bookurl']) || ( $_GET['bookurl'] == null )) {
+	exit('请输入小说第一章网址');
+}
 
-$fp = fopen('pgdxjdlp.txt', 'a+');
+if (empty($_GET['savepath']) || ( $_GET['savepath'] == null )) {
+	exit('请输入保存文件名');
+}
+
+$myrul = $_GET['bookurl'];
+
+$fp = fopen($_GET['savepath'], 'a+');
 
 $index = 1;
 
@@ -22,19 +31,30 @@ function find_and_exec($url) {
 	global $fp;
 	$content = http_get($url);
 	
+	// and the LOCK_EX flag to prevent anyone else writing to the file at the same time
+	global $index;
+	// file_put_contents ( $index . '.html' ,  $content ,  FILE_APPEND  |  LOCK_EX );
+	$content = file_get_contents($index . '.html', 'r');
+	// var_dump($content);
+	
 	// 找到章节名
-	preg_match('/<div class="titlename">(.*?)<\/div>/mis', $content, $title);
+	$lastline = "";
+	preg_match('!<strong class="reader-chapter-tit">(.*)<\/strong>!mis', $content, $title);
 	if (isset($title[1]))
 	{
-		fwrite($fp, $title[1] . "\r\n\r\n");
+		if ($lastline != $title[1])
+		{
+			fwrite($fp, $title[1] . "\r\n\r\n");
+			$lastline = $title[1];
+		}
 	}
 	else
 	{
-		echo '没有找到标题<br/>';
+		exit('没有找到标题<br/>' . var_dump($title));
 	}
 	
 	// 找到正文
-	preg_match('/<div class="articlecon font-normal">(.*?)<\/div>/mis', $content, $text);
+	preg_match('!<div class="reader-article">(.*)<\/div>!', $content, $text);
 	if (isset($text[1]))
 	{
 		preg_match_all('/<p>(.*?)<\/p>/', $text[1], $alltexts);
@@ -46,7 +66,11 @@ function find_and_exec($url) {
 			{
 				if(!strpos($one_paragraph, '&#'))
 				{
-					fwrite($fp, $one_paragraph . "\r\n");
+					if ($lastline != $one_paragraph)
+					{
+						fwrite($fp, $one_paragraph . "\r\n");
+						$lastline = $one_paragraph;
+					}
 				}else {
 					echo $one_paragraph;
 					echo '<br/>';
@@ -56,23 +80,15 @@ function find_and_exec($url) {
 	}
 	else
 	{
-		echo '没有找到正文<br/>';
+		exit('没有找到正文<br/>');
 	}
 	
 	// 找到下一章url
-	preg_match('/<div class="articlebtn">(.*?)<\/div>/mis', $content, $urls);
-	if (isset($urls[1]))
+	preg_match('!<a id="nextChpater" href="(.*)"><\/a>!', $content, $next_url);
+	if (isset($next_url[1]))
 	{
-		preg_match_all('/<a class=(.*?)<\/a>/', $urls[1], $allurls);
-		while (list (, $one_url) = each($allurls[1]))
-		{
-			if (preg_match('/href="(.*?)" rel="nofollow">下一章/', $one_url, $next_url))
-			{
-				fwrite($fp, "\r\n\r\n");
-				return 'https://m.xiashu.cc' . $next_url[1];
-			}
-		}
-		var_dump($urls[1]);
+		fwrite($fp, "\r\n\r\n");
+		return $next_url[1];
 	}else{
 		echo $url;
 		echo '<br/>';

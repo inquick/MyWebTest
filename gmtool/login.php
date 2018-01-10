@@ -1,4 +1,5 @@
-﻿<?php
+<?php
+
 session_start();
 
 if (empty($_GET['username']) || ( $_GET['username'] == null )) {
@@ -20,7 +21,7 @@ if (is_file('acc/' . $InputUserName))
 
 	$password = trim(fgets($fp));
 	fclose($fp);
-   
+
 	// var_dump($name);
 	// echo '<br/>';
 	// var_dump($password);
@@ -28,17 +29,16 @@ if (is_file('acc/' . $InputUserName))
 
 	if ($password == $InputPassWord)
 	{
-		$_SESSION['login_ok'] = true;
+		$_SESSION['UserName'] = "我的角色名";
 		// var_dump($_SESSION);
-		header('Location: TobaGame.php');
-		exit();
+		header('Location: test.html');
 	}
 	else
 	{
 		exit('帐号密码不匹配');
 	}
 }
-else 
+else
 {
 	exit('不存在的帐号');
 }

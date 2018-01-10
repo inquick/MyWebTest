@@ -17,7 +17,7 @@ function http_post($url, $data) {
    //忽略header头信息
    curl_setopt($ch, CURLOPT_HEADER, 0);
    //设置超时时间5秒
-   curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+   curl_setopt($ch, CURLOPT_TIMEOUT, 15);
    //发送请求
    $output = curl_exec($ch);
    //关闭curl
@@ -41,7 +41,7 @@ function http_get($url) {
 	//不处理头信息
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	//连接超过5秒超时
-	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 15);
 	//执行curl
 	$output = curl_exec($ch);
 	//关闭资源
