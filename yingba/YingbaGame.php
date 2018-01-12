@@ -117,6 +117,7 @@ if ($result && strlen($result) > 0)
 		}
 ?>
    </form>
+	 <HR align=center color=#987cb9 SIZE=1>
  		</div>
 	 <div>
 	 <form id="f2" method="post">
@@ -124,8 +125,10 @@ if ($result && strlen($result) > 0)
 	 <input type="button" value="查看记录" onclick="GetReportForm()">
 
 	 </form>
+	 <HR align=center color=#987cb9 SIZE=1>
 	 <div>
    <div id="txt"></div>
+	 <HR align=center color=#987cb9 SIZE=1>
    <div id="report"></div>
 </body>
 </html>
