@@ -15,13 +15,13 @@ $InputPassWord = $_GET['password'];
 
 $result = '';
 
-if (is_file('/home/ubuntu/yingba/config/accounts.json'))
+if (is_file('config/accounts.json'))
 {
 	// 获取帐号信息
-	$fp = fopen('/home/ubuntu/yingba/config/accounts.json', 'r');
-	$data = json_decode(fread($fp, filesize('/home/ubuntu/yingba/config/accounts.json')));
+	$fp = fopen('config/accounts.json', 'r');
+	$data = json_decode(fread($fp, filesize('config/accounts.json')));
 	fclose($fp);
-	
+
 	$AccArray = array();
 	for ($i=0; $i<count($data); $i++)
 	{
@@ -43,7 +43,7 @@ if (is_file('/home/ubuntu/yingba/config/accounts.json'))
 		exit('不存在的帐号');
 	}
 }
-else 
+else
 {
 	exit('不存在的帐号');
 }

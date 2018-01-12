@@ -14,8 +14,8 @@ function http_get($url) {
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 	//不处理头信息
 	curl_setopt($ch, CURLOPT_HEADER, 0);
-	//连接超过5秒超时
-	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+	//连接超过12秒超时
+	curl_setopt($ch, CURLOPT_TIMEOUT, 12);
 	//执行curl
 	$output = curl_exec($ch);
 	//关闭资源
