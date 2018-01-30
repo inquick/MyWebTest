@@ -56,6 +56,8 @@ if ($result && strlen($result) > 0)
         }
         echo '</table></td>';
       }
+
+   	 echo '<br><HR align=center color=#987cb9 SIZE=2><br>'
     }
   }
   else
