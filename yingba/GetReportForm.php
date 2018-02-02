@@ -43,7 +43,7 @@ if ($result && strlen($result) > 0)
       for ($j=0; $j < count($js->data->lst_data->value[$i]->lst_via->value); $j++) {
         echo "游戏名：" . $js->data->lst_data->value[$i]->lst_via->value[$j]->name . '<br>';
         echo '<td><table border="1">';
-				echo '<td>appname</td><td>setup_user_num</td><td>login_user_num</td><td>active_user_num</td><td>pay_user_num</td><td>pay_money</td><td>pay_rate</td><td>pay_arppu</td><td>pay_total</td><td>retention_rate_2day</td><td>retention_rate_3day</td><td>retention_rate_7day</td><td>retention_rate_14day</td><td>retention_rate_30day</td><td>retention_rate_60day</td>';
+				echo '<td>应用名称</td><td>注册人数</td><td>登录人数</td><td>活跃人数</td><td>付费人数</td><td>付费金额</td><td>付费率</td><td>付费arppu</td><td>总付费额</td><td>次日留存率</td><td>3日留存率</td><td>7日留存率</td><td>14日留存率</td><td>30日留存率</td><td>60日留存率</td>';
         echo '<tr>';
         for ($k=0; $k < count($js->data->lst_data->value[$i]->lst_via->value[$j]->lst_app->value); $k++) {
           while (list($key, $value) = each($js->data->lst_data->value[$i]->lst_via->value[$j]->lst_app->value[$k])) {
