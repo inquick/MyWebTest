@@ -12,10 +12,10 @@ if (!isset($_SESSION['login_ok']))
 }
 
 // 把请求服务器ip和端口取出来存到session中
-if (is_file('/home/ubuntu/yingba/config/config.json'))
+if (is_file('config/config.json'))
 {
-	$fp = fopen('/home/ubuntu/yingba/config/config.json', 'r');
-	$data = json_decode(fread($fp, filesize('/home/ubuntu/yingba/config/config.json')));
+	$fp = fopen('config/config.json', 'r');
+	$data = json_decode(fread($fp, filesize('config/config.json')));
 	fclose($fp);
 
 	$_SESSION['YingBaUrl'] = 'http://' . $data->ip . ':' . $data->port . '/YinbaGame/Block2';

@@ -19,7 +19,7 @@ if (is_file('config/serverlist.json'))
 
 			echo '<details>';
 			echo '<summary><a id="' . $data->ServerList[$i]->Name . '">' . $data->ServerList[$i]->Name . '</a></summary>';
-			echo '<ul id="ol-' . $data->ServerList[$i]->Name . '" style="display: block;">';
+			echo '<ol id="ol-' . $data->ServerList[$i]->Name . '" style="display: block;">';
 
 			echo '<li class="dd-item"><div class="dd-content"><a href="javascript:void(0)">网关</a></div></li>';
 			echo '<li class="dd-item"><div class="dd-content"><a href="javascript:void(0)">中心</a></div></li>';
@@ -28,7 +28,7 @@ if (is_file('config/serverlist.json'))
 			echo '<li class="dd-item"><div class="dd-content"><a href="javascript:void(0)">匹配</a></div></li>';
 			echo '<li class="dd-item"><div class="dd-content"><a href="javascript:void(0)">战斗</a></div></li>';
 
-			echo '</ul>';
+			echo '</ol>';
 			echo '</details>';
 		}
 		$_SESSION["ServerList"] = $ServerList;

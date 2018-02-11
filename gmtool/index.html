@@ -18,7 +18,7 @@
     		});
     </script>
     <script type="text/javascript">
-    		$.get('init_server_list.php', function(data) {
+    		$.get('refresh_server_list.php', function(data) {
     			$('#inner-content').html(data);
     		});
     </script>
@@ -31,12 +31,27 @@
               document.getElementById('light').style.display='none';
               document.getElementById('fade').style.display='none';
           }else {
-              doc = '<a href = "javascript:void(0)" onclick = "document.getElementById("light").style.display="block";document.getElementById("fade").style.display="block">登录</a>';
+              doc = '<a href = "javascript:void(0)" onclick = "LoginBtnClick()">登录</a>';
               document.getElementById('light').style.display='block';
               document.getElementById('fade').style.display='block';
           }
     			$('#login_info').html(doc);
     		});
+    </script>
+    <script>
+    function LoginBtnClick(){
+      document.getElementById('light').style.display='block';
+      document.getElementById('fade').style.display='block';
+    }
+    function CancelLoginBtnClick(){
+      document.getElementById('light').style.display='none';
+      document.getElementById('fade').style.display='none';
+    }
+    </script>
+    <script>
+      setInterval(function(){
+
+    }, 10);
     </script>
 <style>
 .black_overlay{
@@ -96,9 +111,29 @@
         密&emsp;码：<input type="password" name="password" />
         <br/><br/>
         <input type="submit" value="登录">
-        <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">取消</a>
+        <a href = "javascript:void(0)" onclick = "CancelLoginBtnClick()">取消</a>
     </form>
     </div>
   <div id="fade" class="black_overlay"></div>
   </body>
 </html>
+
+<?php
+
+session_start();
+
+$ConfigPath = 'config/config.json'；
+
+// 把请求服务器ip和端口取出来存到session中
+if (is_file($ConfigPath))
+{
+	$fp = fopen($ConfigPath, 'r');
+	$data = json_decode(fread($fp, filesize($ConfigPath)));
+	fclose($fp);
+
+  echo var_dump($data);
+
+	$_SESSION['GMToolUrl'] = 'http://' . $data->ip . ':' . $data->port . '/Toba/GMServers';
+}
+
+?>

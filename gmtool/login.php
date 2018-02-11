@@ -1,6 +1,10 @@
-<?php
+﻿<?php
 
 session_start();
+
+if (!isset($_SESSION["AccountList"])) {
+	LoadAccountsJson();
+}
 
 if (empty($_GET['username']) || ( $_GET['username'] == null )) {
 	exit('请输入帐号');
@@ -13,34 +17,42 @@ if (empty($_GET['password']) || ( $_GET['password'] == null )) {
 $InputUserName = $_GET['username'];
 $InputPassWord = $_GET['password'];
 
-$result = '';
-
-if (is_file('acc/' . $InputUserName))
+while (list($acc, $psd) = each($_SESSION["AccountList"]))
 {
-	$fp = fopen('acc/' . $InputUserName, 'r');
-
-	$password = trim(fgets($fp));
-	fclose($fp);
-
-	// var_dump($name);
-	// echo '<br/>';
-	// var_dump($password);
-	// echo '<br/><br/>';
-
-	if ($password == $InputPassWord)
-	{
-		$_SESSION['UserName'] = "我的角色名";
-		// var_dump($_SESSION);
-		header('Location: test.html');
-	}
-	else
-	{
-		exit('帐号密码不匹配');
+	if ($InputUserName == $acc) {
+		if ($InputPassWord == $psd) {
+				$_SESSION['UserName'] = "我的角色名";
+				// var_dump($_SESSION);
+				header('Location: index.html');
+		}
+		else
+		{
+			echo '帐号密码不匹配';
+		}
 	}
 }
-else
-{
-	exit('不存在的帐号');
-}
 
+echo '不存在的帐号';
+
+function LoadAccountsJson()
+{
+	$filename = 'config/accounts.json';
+	if (is_file($filename))
+	{
+		$fp = fopen($filename, 'r');
+		$source = fread($fp, filesize($filename));
+		$data = json_decode($source);
+
+		$password = trim(fgets($fp));
+		fclose($fp);
+		$AccountList = array();
+
+		while (list(, $accountinfo) = each($data))
+		{
+			$AccountList[$accountinfo->acc] = $accountinfo->psd;
+		}
+
+		$_SESSION["AccountList"] = $AccountList;
+	}
+}
 ?>
