@@ -4,3 +4,19 @@ message Person
 {
 	bytes name = 1;
 }
+// 错误码
+enum ERRNO
+{
+	ERR_OK						= 0;
+
+    // 服务器不存在
+    ERR_SERVER_NOTFOUND			= 10001;
+}
+
+enum MSGID
+{
+	MSGID_ZERO = 0;
+	GetServerList = 10001;
+	GetServerOnline = 10002;
+	GetUserInfo = 10003;
+}
