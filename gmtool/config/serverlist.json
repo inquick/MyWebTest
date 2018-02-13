@@ -23,5 +23,29 @@
 					"Name":"BATTLESERVER_001",
 					"Type":6
 				}]
+		},{
+			"Id": 2,
+			"Ip": "192.168.2.150",
+			"Name": "龙龙",
+			"Port": 4568,
+			"Servers":[{
+					"Name":"agent_001",
+					"Type":1
+				},{
+					"Name":"center_001",
+					"Type":2
+				},{
+					"Name":"LOGINSERVER_001",
+					"Type":3
+				},{
+					"Name":"WORLDSERVER_001",
+					"Type":4
+				},{
+					"Name":"MATCHSERVER_001",
+					"Type":5
+				},{
+					"Name":"BATTLESERVER_001",
+					"Type":6
+				}]
 		}]
 }

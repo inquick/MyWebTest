@@ -18,11 +18,19 @@ RefreshUI();
 function RefreshStatus()
 {
 		$data = new Toba\Gmtool\Cs\MSG_GetServerList_Request();
-		$result = http_post($_SESSION['GMToolUrl'] . '?msgId=10001&awardType=0&awardValue=0&awardLv=0&awardNum=0', $data->serializeToString());
+		$result = http_post($_SESSION['GMToolUrl'], $data->serializeToString());
 
 		if ($result) {
-
+			echo var_dump($result);
+			$OnlineList = new Toba\Gmtool\Cs\MSG_GetServerOnline_Respone();
+			$OnlineList->mergeFromString($result);
+		}else{
+			echo '获取服务器列表失败';
 		}
+
+		$data2 = new Toba\Gmtool\Cs\MSG_GetServerOnline_Request();
+		$data2->setServerName('WORLDSERVER_001');
+		echo $data2->serializeToString();
 }
 
 function RefreshUI()

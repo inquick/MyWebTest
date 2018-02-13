@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html>
   <head>
     <meta name="generator"
@@ -15,11 +15,6 @@
     			$('#inner-content').slimScroll({
     				height: '20px';
     			});
-    		});
-    </script>
-    <script type="text/javascript">
-    		$.get('refresh_server_list.php', function(data) {
-    			$('#inner-content').html(data);
     		});
     </script>
     <script type="text/javascript">
@@ -50,8 +45,10 @@
     </script>
     <script>
       setInterval(function(){
-
-    }, 10);
+		$.get('refresh_server_list.php', function(data) {
+			$('#inner-content').html(data);
+		});
+  }, 60000);
     </script>
 <style>
 .black_overlay{
@@ -122,7 +119,7 @@
 
 session_start();
 
-$ConfigPath = 'config/config.json'；
+$ConfigPath = 'config/config.json';
 
 // 把请求服务器ip和端口取出来存到session中
 if (is_file($ConfigPath))
@@ -131,9 +128,7 @@ if (is_file($ConfigPath))
 	$data = json_decode(fread($fp, filesize($ConfigPath)));
 	fclose($fp);
 
-  echo var_dump($data);
-
-	$_SESSION['GMToolUrl'] = 'http://' . $data->ip . ':' . $data->port . '/Toba/GMServers';
+	$_SESSION['GMToolUrl'] = 'http://' + $data->ip + ':' + $data->port + '/Toba/GMServers';
 }
 
 ?>
