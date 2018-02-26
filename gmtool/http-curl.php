@@ -18,6 +18,8 @@ function http_post($url, $data) {
    curl_setopt($ch, CURLOPT_HEADER, 0);
    //设置超时时间15秒
    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+	 // 数据放在body里面，需要设置头信息
+	 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data)));
    //发送请求
    $output = curl_exec($ch);
    //关闭curl

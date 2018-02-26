@@ -1,11 +1,10 @@
 {
 	"ServerList": [{
 			"Id": 1,
-			"Ip": "120.92.140.168",
+			"Url": "http://192.168.2.150:4568/Toba/GMServers",
 			"Name": "送审服",
-			"Port": 8800,
 			"Servers":[{
-					"Name":"agent_001",
+					"Name":"agentd_001",
 					"Type":1
 				},{
 					"Name":"center_001",
@@ -25,11 +24,10 @@
 				}]
 		},{
 			"Id": 2,
-			"Ip": "192.168.2.150",
+			"Url": "http://192.168.2.150:4568/Toba/GMServers",
 			"Name": "龙龙",
-			"Port": 4568,
 			"Servers":[{
-					"Name":"agent_001",
+					"Name":"agentd_001",
 					"Type":1
 				},{
 					"Name":"center_001",

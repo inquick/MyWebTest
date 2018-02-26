@@ -1,22 +1,19 @@
 <?php
-include_once 'http-curl.php';
 
-include_once 'testcode/Person.php';
-include_once 'testcode/GPBMetadata/Simple.php';
+session_start();
 
+$ConfigPath = 'config/config.json';
 
-echo '一会要new一个class！！<br>';
+// 把请求服务器ip和端口取出来存到session中
+if (is_file($ConfigPath))
+{
+	$fp = fopen($ConfigPath, 'r');
+	$data = json_decode(fread($fp, filesize($ConfigPath)));
+	fclose($fp);
 
-$data = new Person();
-$data->setName("我的名字");
+  echo var_dump($data);
 
-echo $data->serializeToString();
-// $data2->setServerName('WORLDSERVER_001');
-//
-// echo '一会要serializeToString！！';
-//
-// echo $data2->serializeToString();
-//
-// echo '完成';
+	//$_SESSION['GMToolUrl'] = 'http://' + $data->ip + ':' + $data->port + '/Toba/GMServers';
+}
 
 ?>

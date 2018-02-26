@@ -21,7 +21,7 @@ while (list($acc, $psd) = each($_SESSION["AccountList"]))
 {
 	if ($InputUserName == $acc) {
 		if ($InputPassWord == $psd) {
-				$_SESSION['UserName'] = "我的角色名";
+				$_SESSION['UserName'] = "GM:" . $acc;
 				// var_dump($_SESSION);
 				header('Location: index.html');
 		}

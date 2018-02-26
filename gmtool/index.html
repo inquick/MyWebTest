@@ -10,6 +10,7 @@
     <!-- <script src="/phpMyAdmin/js/jquery.more.extend.js?4.11.94"></script> -->
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/jquery.slimscroll.min.js"></script>
+    <script src="js/spin.js"></script>
     <script type="text/javascript">
     		jQuery(document).ready(function ($) {
     			$('#inner-content').slimScroll({
@@ -31,9 +32,10 @@
               document.getElementById('fade').style.display='block';
           }
     			$('#login_info').html(doc);
+          // alert(doc);
     		});
     </script>
-    <script>
+    <script type="text/javascript">
     function LoginBtnClick(){
       document.getElementById('light').style.display='block';
       document.getElementById('fade').style.display='block';
@@ -43,12 +45,58 @@
       document.getElementById('fade').style.display='none';
     }
     </script>
-    <script>
+    <script type="text/javascript">
+      // var target = document.getElementById('spin');
+      // var spinner;
+      function GetServerListAndRefreshUI(){
+        // spinner = new Spinner().spin(target);
+        $.get('GetServerList.php', function(data){
+          // alert('请求服务器列表：' + data);
+          RefreshServerList();
+        });
+      }
+
+      function RefreshUI()
+      {
+        $.get('refresh_UI.php', function(data){
+          $('#option-ui').html(data);
+          // alert(data);
+        });
+      }
+
+      function RefreshServerList(){
+        $.get('refresh_server_list.php', function(data) {
+          $('#inner-content').html(data);
+          // spinner.spin();
+        });
+        RefreshUI();
+      }
+
       setInterval(function(){
-		$.get('refresh_server_list.php', function(data) {
-			$('#inner-content').html(data);
-		});
-  }, 60000);
+    		GetServerListAndRefreshUI();
+      }, 30000);
+
+      GetServerListAndRefreshUI();
+    </script>
+    <script type="text/javascript">
+      function SelectServer(e){
+        var id = e.getAttribute("server_id");
+    		$.get('SelectServer.php?SID=' + id, function(data) {
+          // alert('选择服务器信息：' + data);
+    			GetServerListAndRefreshUI();
+    		});
+      }
+    </script>
+    <script type="text/javascript">
+      function SelectSubServer(e){
+        var id = e.getAttribute("server_id");
+        var name = e.getAttribute("server_name");
+
+        // alert('选中的服务器名字：' + name);
+        $.get('SelectServer.php?SID=' + id + '&SName=' + name, function(data) {
+          RefreshServerList();
+        });
+      }
     </script>
 <style>
 .black_overlay{
@@ -82,7 +130,7 @@
 </style>
   </head>
   <body>
-
+  <div class="spin"></div>
 	<!-- 左侧服务器列表 -->
     <div class="m-splitter-left left-container" style="border-right:3px solid #ccc; float:left; width:200px;">
       <b>服务器列表</b>
@@ -92,14 +140,11 @@
 
 	<!-- 右侧主界面区域 -->
     <div class="main_partant_div">
-    <div id="login_info" align="right">
+    <div id="login_info" align="right" style="margin-right: 10px;">
       <!-- 根据登录状态刷新此处显示 -->
     </div>
-		<center>
-		<button class="start_menu" disabled="true">启动</button>
-		<button class="search_restart" disabled="true">重启</button>
-		<button class="stop_menu" disabled="true">停止</button>
-		</center>
+		<div id='option-ui' align='left' style="margin-left: 210px; margin-top: 10px;">
+		</div>
 	</div>
   <div id="light" class="white_content" align="center">
     <img src="logo.jpg">
@@ -114,21 +159,3 @@
   <div id="fade" class="black_overlay"></div>
   </body>
 </html>
-
-<?php
-
-session_start();
-
-$ConfigPath = 'config/config.json';
-
-// 把请求服务器ip和端口取出来存到session中
-if (is_file($ConfigPath))
-{
-	$fp = fopen($ConfigPath, 'r');
-	$data = json_decode(fread($fp, filesize($ConfigPath)));
-	fclose($fp);
-
-	$_SESSION['GMToolUrl'] = 'http://' + $data->ip + ':' + $data->port + '/Toba/GMServers';
-}
-
-?>
