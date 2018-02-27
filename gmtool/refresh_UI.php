@@ -20,7 +20,10 @@ if (isset($_SESSION['SelectedServer']['Id']) && isset($_SESSION['SelectedServer'
 				# code...
 				break;
 			case ServerType::ServerType_World:
-				# code...
+				echo '<br><a href="javascript:void(0)" onclick="Freezn()">封号处理</a>';
+				echo '<br><a href="javascript:void(0)" onclick="UnFreezn()">解封处理</a>';
+				echo '<br><a href="javascript:void(0)" onclick="SendMail()">发送邮件</a>';
+				echo '<br><a href="javascript:void(0)" onclick="SetActivities()">配置活动</a>';
 				break;
 			default:
 				# code...

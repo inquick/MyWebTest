@@ -13,6 +13,15 @@ class MessageID
 
 	//获取玩家信息
 	const MsgID_GetUserInfo     = 10003;
+
+ //踢玩家下线,封号
+	const MsgID_FreeznUser      = 10004;
+
+	 //解除封号
+	const MsgID_UnFreeznUser    = 10005;
+	
+	 //发送邮件
+	const MsgID_SendMail        = 10006;
 }
 
 ?>
