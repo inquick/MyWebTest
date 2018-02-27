@@ -18,7 +18,7 @@ if (isset($_SESSION['SelectedServer']['Id'])) {
 		$url = $_SESSION["ServerList"][$_SESSION['SelectedServer']['Id']]["Url"];
 		$result = MessageRequest::FreeznUser($url, (int)$_GET["userid"], $time);
 
-		return $result;
+		return '' . $result;
 }
 
 ?>

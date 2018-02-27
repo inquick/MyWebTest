@@ -113,6 +113,7 @@
         document.getElementById('freezn-account').style.display='none';
         document.getElementById('unfreezn-account').style.display='none';
         document.getElementById('set-activities').style.display='none';
+        document.getElementById('serach-user').style.display='none';
       }
 
       function ReqrestSendMail(){
@@ -154,30 +155,16 @@
     </script>
     <!-- 封号处理 -->
     <script type="text/javascript">
-      function Freezn(){
-        document.getElementById('send-mail').style.display='none';
-        document.getElementById('freezn-account').style.display='block';
-        document.getElementById('unfreezn-account').style.display='none';
-        document.getElementById('set-activities').style.display='none';
-      }
-
       function ReqrestFreezeUser(){
         var url = 'FreezeUser.php?userid=' + document.getElementById('freeze_userid').value
                 + '&date=' + document.getElementById('freeze_date').value;
         $.get(url, function(data) {
-          alert(data);
+          alert('' + data);
         });
       }
     </script>
     <!-- 解封处理 -->
     <script type="text/javascript">
-      function UnFreezn(){
-        document.getElementById('send-mail').style.display='none';
-        document.getElementById('freezn-account').style.display='none';
-        document.getElementById('unfreezn-account').style.display='block';
-        document.getElementById('set-activities').style.display='none';
-      }
-
       function ReqrestUnFreezeUser(){
         var url = 'UnFreezeUser.php?userid=' + document.getElementById('unfreeze_userid').value;
         $.get(url, function(data) {
@@ -189,9 +176,24 @@
     <script type="text/javascript">
       function SetActivities(){
         document.getElementById('send-mail').style.display='none';
-        document.getElementById('freezn-account').style.display='none';
-        document.getElementById('unfreezn-account').style.display='none';
         document.getElementById('set-activities').style.display='block';
+        document.getElementById('serach-user').style.display='none';
+      }
+    </script>
+    <!-- 查找玩家信息 -->
+    <script type="text/javascript">
+      function SearchUserInfo(){
+        document.getElementById('send-mail').style.display='none';
+        document.getElementById('set-activities').style.display='none';
+        document.getElementById('serach-user').style.display='block';
+      }
+
+      function ReqrestSearchUserInfo(){
+          var url = 'SearchUserInfo.php?useracc=' + document.getElementById('search-user-acc').value;
+          $.get(url, function(data) {
+            alert("查询结果：" + data);
+            $('#searched-user-info').html(data);
+          });
       }
     </script>
 <style>
@@ -250,13 +252,13 @@
            <option value="1">个人邮件</option>
            <option value="3">全服邮件</option>
          </select>
-        </div>
-        玩家id：<input type="text" id="mail_userid" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="输入玩家id"/><br>
+        </div><br>
+        玩家id：<input type="text" id="mail_userid" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="输入玩家id"/><br><br>
         开始时间：<input type="date" id="mail_beginedate" /><br>
-        结束时间：<input type="date" id="mail_enddate" /><br>
-        邮件标题：<input type="text" id="mail_title" placeholder="输入邮件标题"/><br>
+        结束时间：<input type="date" id="mail_enddate" /><br><br>
+        邮件标题：<input type="text" id="mail_title" placeholder="输入邮件标题"/><br><br>
         邮件内容: <br>
-       <textarea name="content" id="mail_content" style="width:200px;height:80px;" placeholder="输入邮件内容"/></textarea><br/>
+       <textarea name="content" id="mail_content" style="width:200px;height:80px;" placeholder="输入邮件内容"/></textarea><br/><br>
        物品1：
        <input type="text" id="item1_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品1类型"/>
        <input type="text" id="item1_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品1id"/>
@@ -289,31 +291,40 @@
        <input type="text" id="item8_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8类型"/>
        <input type="text" id="item8_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8id"/>
        <input type="text" id="item8_num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8数量"/><br>
-       落款：<input type="text" name="signature" id="mail_signature" placeholder="落款"/><br>
+       落款：<input type="text" name="signature" id="mail_signature" placeholder="落款"/><br><br>
        <button onclick="ReqrestSendMail()">发送</button>
       <!-- </form> -->
     </div>
     <!-- 封号 -->
     <div id='freezn-account' style="border-left:3px solid #ccc; border-top:3px solid #ccc; border-right:3px solid #ccc; border-bottom:3px solid #ccc; float:left; display:none;">
       <!-- <form method="GET"> -->
-        玩家id：<input type="text" id="freeze_userid" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="输入玩家id"/><br>
-        截止时间：<input type="datetime-local" id="freeze_date" /><br>
+        玩家id：<input type="text" id="freeze_userid" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="输入玩家id"/><br><br>
+        截止时间：<input type="datetime-local" id="freeze_date" /><br><br>
        <button onclick="ReqrestFreezeUser()">封号</button>
       <!-- </form> -->
     </div>
     <!-- 踢人下线 -->
     <div id='unfreezn-account' style="border-left:3px solid #ccc; border-top:3px solid #ccc; border-right:3px solid #ccc; border-bottom:3px solid #ccc; float:left; display:none;">
       <!-- <form method="GET"> -->
-        玩家id：<input type="text" id="unfreeze_userid" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="输入玩家id"/><br>
+        玩家id：<input type="text" id="unfreeze_userid" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="输入玩家id"/><br><br>
        <button onclick="ReqrestUnFreezeUser()">解封</button>
       <!-- </form> -->
     </div>
     <!-- 活动设置 -->
     <div id='set-activities' style="border-left:3px solid #ccc; border-top:3px solid #ccc; border-right:3px solid #ccc; border-bottom:3px solid #ccc; float:left; display:none;">
       <!-- <form method="GET"> -->
-
+<br>
       <button onclick="ReqrestSetActivities()">提交修改</button>
       <!-- </form> -->
+    </div>
+    <!-- 查询玩家信息 -->
+    <div id='serach-user' style="border-left:3px solid #ccc; border-top:3px solid #ccc; border-right:3px solid #ccc; border-bottom:3px solid #ccc; float:left; display:none;">
+      玩家帐号：<input type="text" id="search-user-acc" placeholder="输入帐号"/><br><br>
+      <button onclick="ReqrestSearchUserInfo()">查询</button><br><br>
+      <!-- </form> -->
+      <div>查询结果</div>
+      <div id='searched-user-info'>
+      </div>
     </div>
 	</div>
   <div id="light" class="white_content" align="center">

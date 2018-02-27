@@ -8,7 +8,7 @@ include_once 'MessageID.php';
 class MessageRequest{
 	static function GetServerList($url)
 	{
-		$data = array('Msg_ID' => MessageID::MsgID_GetServerList, 'User_ID' => 0, 'Server_Name' => '', );
+		$data = array('Msg_ID' => MessageID::MsgID_GetServerList, );
 		$result = http_post($url, json_encode($data));
 
 		if (!$result){
@@ -46,7 +46,7 @@ class MessageRequest{
 
 	static function GetServerOnline($url, $servername)
 	{
-		$data = array('Msg_ID' => MessageID::MsgID_GetServerOnline, 'User_ID' => 0, 'Server_Name' => $servername, );
+		$data = array('Msg_ID' => MessageID::MsgID_GetServerOnline, 'Server_Name' => $servername, );
 		$result = http_post($url, json_encode($data));
 
 		if (!$result){
@@ -62,16 +62,21 @@ class MessageRequest{
 		return var_dump($result);
 	}
 
-	static function GetUserInfo($url, $userid, $servername)
+	static function GetUserInfo($url, $useracc)
 	{
-		$data = array('Msg_ID' => MessageID::MsgID_GetUserInfo, 'User_ID' => $userid, 'Server_Name' => $servername, );
+		$data = array('Msg_ID' => MessageID::MsgID_GetUserInfo, 'Account' => $useracc, );
 		$result = http_post($url, json_encode($data));
 
+		if (!$result){
+			return false;
+		}
+
+		return json_decode($result);
 	}
 
 	static function FreeznUser($url, $userid, $time)
 	{
-		$data = array('Msg_ID' => MessageID::MsgID_FreeznUser, 'User_ID' => $userid, 'Server_Name' => '', 'Time' => $time);
+		$data = array('Msg_ID' => MessageID::MsgID_FreeznUser, 'User_ID' => $userid, 'Time' => $time);
 		$result = http_post($url, json_encode($data));
 
 		if (!$result){
@@ -84,7 +89,7 @@ class MessageRequest{
 
 	static function UnFreeznUser($url, $userid)
 	{
-		$data = array('Msg_ID' => MessageID::MsgID_UnFreeznUser, 'User_ID' => $userid, 'Server_Name' => '', );
+		$data = array('Msg_ID' => MessageID::MsgID_UnFreeznUser, 'User_ID' => $userid, );
 		$result = http_post($url, json_encode($data));
 
 		if (!$result){
@@ -94,25 +99,10 @@ class MessageRequest{
 		$response = json_decode($result);
 		return $response->Result;
 	}
-/*
-	type ClientRequest struct {
-	Msg_ID         int    `json:"Msg_ID"`
-	User_ID        uint32 `json:"User_ID"`
-	Server_Name    string `json:"Server_Name"`
-	Time           string `json:"Time"`
-	Mail_type      uint32 `json:"mailtype"`
-	Mail_user      uint32 `json:"userid"`
-	Mail_start     int64  `json:"starttime"`
-	Mail_end       int64  `json:"endtime"`
-	Mail_title     string `json:"title"`
-	Mail_content   string `json:"content"`
-	Mail_award     string `json:"award"`
-	Mail_signature string `json:"signature"`
-}*/
 
 	static function SendMail($url, $userid, $mailtype, $starttime, $endtime, $title, $content, $award, $signature)
 	{
-		$data = array('Msg_ID' => MessageID::MsgID_SendMail, 'User_ID' => $userid, 'Server_Name' => '', );
+		$data = array('Msg_ID' => MessageID::MsgID_SendMail, 'User_ID' => $userid, );
 		$result = http_post($url, json_encode($data));
 
 		if (!$result){
