@@ -1,5 +1,7 @@
 ﻿<?php
 
+include_once('ServerType.php');
+
 session_start();
 
 if (!isset($_SESSION["ServerList"])) {
@@ -24,15 +26,19 @@ while (list($id, $info) = each($ServerList))
 		while(list($ServerName, $ServerInfo) = each($info["Servers"]))
 		{
 			// var_dump($ServerInfo["Online"]);
+			$onlineCnt = '';
+			if ($selected && $ServerInfo["Type"] == ServerType::ServerType_World) {
+				$onlineCnt = '(' . $ServerInfo["OnlineCnt"] . ')';
+			}
 			if ($selected && isset($_SESSION['SelectedServer']['Name']) && $_SESSION['SelectedServer']['Name'] == $ServerName) {
 				if ($ServerInfo["Online"]) {
-						echo '<div><a server_id="'. $id . '" server_name="' . $ServerName . '" style="color:blue; background-color:Darkorange" onclick="SelectSubServer(this)">' . $ServerName . '</a></div>';
+						echo '<div><a server_id="'. $id . '" server_name="' . $ServerName . '" style="color:blue; background-color:Darkorange" onclick="SelectSubServer(this)">' . $ServerName . $onlineCnt . '</a></div>';
 				}else{
 					echo '<div><a server_id="'. $id . '" server_name="' . $ServerName . '" style="color:black; background-color:Darkorange" onclick="SelectSubServer(this)">' . $ServerName . '</a></div>';
 				}
 			} else {
 				if ($ServerInfo["Online"]) {
-						echo '<div><a server_id="'. $id . '" server_name="' . $ServerName . '" style="color:blue" onclick="SelectSubServer(this)">' . $ServerName . '</a></div>';
+						echo '<div><a server_id="'. $id . '" server_name="' . $ServerName . '" style="color:blue" onclick="SelectSubServer(this)">' . $ServerName . $onlineCnt . '</a></div>';
 				}else{
 					echo '<div><a server_id="'. $id . '" server_name="' . $ServerName . '" style="color:black" onclick="SelectSubServer(this)">' . $ServerName . '</a></div>';
 				}
@@ -40,6 +46,8 @@ while (list($id, $info) = each($ServerList))
 		}
 		echo '</ul>';
 		echo '</details>';
+
+		// var_dump($_SESSION["ServerList"]);
 }
 
 function LoadJson()
@@ -62,9 +70,13 @@ function LoadJson()
 				$ServerList[$id]["Name"] = $data->ServerList[$i]->Name;
 				$ServerList[$id]["Servers"] = array();
 				for ($j=0; $j < count($data->ServerList[$i]->Servers); $j++) {
-					$ServerList[$id]["Servers"][$data->ServerList[$i]->Servers[$j]->Name]["Name"] = $data->ServerList[$i]->Servers[$j]->Name;
-					$ServerList[$id]["Servers"][$data->ServerList[$i]->Servers[$j]->Name]["Type"] = $data->ServerList[$i]->Servers[$j]->Type;
-					$ServerList[$id]["Servers"][$data->ServerList[$i]->Servers[$j]->Name]["Online"] = false;
+					$name = $data->ServerList[$i]->Servers[$j]->Name;
+					$ServerList[$id]["Servers"][$name]["Name"] = $name;
+					$ServerList[$id]["Servers"][$name]["Type"] = $data->ServerList[$i]->Servers[$j]->Type;
+					$ServerList[$id]["Servers"][$name]["Online"] = false;
+					if ($ServerList[$id]["Servers"][$name]["Type"] == ServerType::ServerType_World) {
+						$ServerList[$id]["Servers"][$name]["OnlineCnt"] = 0;
+					}
 				}
 			}
 			$_SESSION["ServerList"] = $ServerList;
