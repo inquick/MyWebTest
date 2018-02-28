@@ -20,26 +20,30 @@ if (isset($_SESSION['SelectedServer']['Id'])) {
 		// 	Key     string `json:"Key"`
 		// 	Server  string `json:"Server"`
 		// }
-    $htmldoc = '';
-    if ($result != false) {
-      if ($result->Result == 'SUCCESS') {
-        $htmldoc = '<div id="serarced-acc">帐号：' . $result->Account . '</div><br>';
-        $htmldoc = $htmldoc + '<div id="serarced-id">ID：' . $result->UserID . '</div><br>';
-        $htmldoc = $htmldoc + '<div id="serarced-nick">昵称：' . $result->Nick . '</div><br>';
-        $htmldoc = $htmldoc + '<div id="serarced-key">key：' . $result->Key . '</div><br>';
-        $htmldoc = $htmldoc + '<div id="serarced-server">最近登录服务器：' . $result->Server . '</div><br>';
-        if ($result->IsOnline){
-          $htmldoc = $htmldoc + '在线<br>';
-        }else {
-          $htmldoc = $htmldoc + '离线';
-        }
-				$htmldoc = $htmldoc + '<button onclick="ReqrestFreezeUser()">封号</button><br>';
-				$htmldoc = $htmldoc + '<button onclick="ReqrestUnFreezeUser()">解封</button>';
-      }
-    }else {
-      $htmldoc = '服务器未响应！！！';
-    }
-    return $htmldoc;
+    // var_dump($result);
+
+
+    // if ($result) {
+    //   $response = json_decode($result);
+    //   if ($response->Result == 'SUCCESS') {
+    //     echo '<div id="serarced-acc">帐号：' . $response->Account . '</div>';
+    //     echo '<div id="serarced-id">ID：' . $response->UserID . '</div>';
+    //     echo '<div id="serarced-nick">昵称：' . $response->Nick . '</div>';
+    //     echo '<div id="serarced-key">key：' . $response->Key . '</div>';
+    //     echo '<div id="serarced-server">最近登录服务器：' . $response->Server . '</div>';
+    //     if ($response->IsOnline){
+    //       echo '在线<br>';
+    //     }else {
+    //       echo '离线';
+    //     }
+        echo '<br>截止时间：<input type="datetime-local" id="freeze_date" />&nbsp;';
+				echo '<button onclick="ReqrestFreezeUser()">封号</button><br><hr />';
+				echo '<button onclick="ReqrestUnFreezeUser()">解封</button><br><hr />';
+				echo '<button onclick="SendPrivateMail()">给他发邮件</button>';
+    //   }
+    // }else {
+    //   echo '服务器未响应！！！';
+    // }
 }
 
 ?>

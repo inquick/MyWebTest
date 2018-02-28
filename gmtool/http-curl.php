@@ -17,7 +17,7 @@ function http_post($url, $data) {
    //忽略header头信息
    curl_setopt($ch, CURLOPT_HEADER, 0);
    //设置超时时间15秒
-   curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+   curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 	 // 数据放在body里面，需要设置头信息
 	 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data)));
    //发送请求
@@ -43,7 +43,7 @@ function http_get($url) {
 	//不处理头信息
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	//连接超过15秒超时
-	curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 	//执行curl
 	$output = curl_exec($ch);
 	//关闭资源

@@ -71,12 +71,12 @@ class MessageRequest{
 			return false;
 		}
 
-		return json_decode($result);
+		return $result;
 	}
 
-	static function FreeznUser($url, $userid, $time)
+	static function FreeznUser($url, $userid, $time, $server)
 	{
-		$data = array('Msg_ID' => MessageID::MsgID_FreeznUser, 'User_ID' => $userid, 'Time' => $time);
+		$data = array('Msg_ID' => MessageID::MsgID_FreeznUser, 'User_ID' => $userid, 'Time' => $time, 'Server_Name' => $server,);
 		$result = http_post($url, json_encode($data));
 
 		if (!$result){
@@ -87,9 +87,9 @@ class MessageRequest{
 		return $response->Result;
 	}
 
-	static function UnFreeznUser($url, $userid)
+	static function UnFreeznUser($url, $userid, $server)
 	{
-		$data = array('Msg_ID' => MessageID::MsgID_UnFreeznUser, 'User_ID' => $userid, );
+		$data = array('Msg_ID' => MessageID::MsgID_UnFreeznUser, 'User_ID' => $userid, 'Server_Name' => $server, );
 		$result = http_post($url, json_encode($data));
 
 		if (!$result){

@@ -30,19 +30,37 @@
 					"Name":"agentd_001",
 					"Type":1
 				},{
+					"Name":"agentd_003",
+					"Type":1
+				},{
 					"Name":"center_001",
+					"Type":2
+				},{
+					"Name":"center_003",
 					"Type":2
 				},{
 					"Name":"LOGINSERVER_001",
 					"Type":3
 				},{
+					"Name":"LOGINSERVER_003",
+					"Type":3
+				},{
 					"Name":"WORLDSERVER_001",
+					"Type":4
+				},{
+					"Name":"WORLDSERVER_003",
 					"Type":4
 				},{
 					"Name":"MATCHSERVER_001",
 					"Type":5
 				},{
+					"Name":"MATCHSERVER_003",
+					"Type":5
+				},{
 					"Name":"BATTLESERVER_001",
+					"Type":6
+				},{
+					"Name":"BATTLESERVER_003",
 					"Type":6
 				}]
 		}]

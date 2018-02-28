@@ -117,9 +117,7 @@
       }
 
       function ReqrestSendMail(){
-        var url = 'SendMail.php?mailtype=' + document.getElementById('mailtype').value
-                + '&userid=' + document.getElementById('mail_userid').value
-                + '&beginedate=' + document.getElementById('mail_beginedate').value
+        var url = 'SendMail.php?mailtype=3&userid=0&beginedate=' + document.getElementById('mail_beginedate').value
                 + '&enddate=' + document.getElementById('mail_enddate').value
                 + '&title=' + document.getElementById('mail_title').value
                 + '&content=' + document.getElementById('mail_content').value
@@ -152,21 +150,59 @@
           alert(data);
         });
       }
+
+      function ReqrestSendPrivateMail(){
+        var url = 'SendMail.php?mailtype=1&userid=' + document.getElementById('serarced-id').value
+                + '&beginedate=' + document.getElementById('private_mail_beginedate').value
+                + '&enddate=' + document.getElementById('private_mail_enddate').value
+                + '&title=' + document.getElementById('private_mail_title').value
+                + '&content=' + document.getElementById('private_mail_content').value
+                + '&item1_type=' + document.getElementById('private_item1_type').value
+                + '&item1_id=' + document.getElementById('private_item1_id').value
+                + '&item1_num=' + document.getElementById('private_item1_num').value
+                + '&item2_type=' + document.getElementById('private_item2_type').value
+                + '&item2_id=' + document.getElementById('private_item2_id').value
+                + '&item2_num=' + document.getElementById('private_item2_num').value
+                + '&item3_type=' + document.getElementById('private_item3_type').value
+                + '&item3_id=' + document.getElementById('private_item3_id').value
+                + '&item3_num=' + document.getElementById('private_item3_num').value
+                + '&item4_type=' + document.getElementById('private_item4_type').value
+                + '&item4_id=' + document.getElementById('private_item4_id').value
+                + '&item4_num=' + document.getElementById('private_item4_num').value
+                + '&item5_type=' + document.getElementById('private_item5_type').value
+                + '&item5_id=' + document.getElementById('private_item5_id').value
+                + '&item5_num=' + document.getElementById('private_item5_num').value
+                + '&item6_type=' + document.getElementById('private_item6_type').value
+                + '&item6_id=' + document.getElementById('private_item6_id').value
+                + '&item6_num=' + document.getElementById('private_item6_num').value
+                + '&item7_type=' + document.getElementById('private_item7_type').value
+                + '&item7_id=' + document.getElementById('private_item7_id').value
+                + '&item7_num=' + document.getElementById('private_item7_num').value
+                + '&item8_type=' + document.getElementById('private_item8_type').value
+                + '&item8_id=' + document.getElementById('private_item8_id').value
+                + '&item8_num=' + document.getElementById('private_item8_num').value
+                + '&signature=' + document.getElementById('private_mail_signature').value;
+        $.get(url, function(data) {
+          alert(data);
+        });
+      }
     </script>
     <!-- 封号处理 -->
     <script type="text/javascript">
       function ReqrestFreezeUser(){
-        var url = 'FreezeUser.php?userid=' + document.getElementById('freeze_userid').value
-                + '&date=' + document.getElementById('freeze_date').value;
+        var url = 'FreezeUser.php?userid=' + document.getElementById('serarced-id').value
+                + '&date=' + document.getElementById('freeze_date').value
+                + '&server=' + document.getElementById('serarced-server').value;
         $.get(url, function(data) {
-          alert('' + data);
+          alert(data);
         });
       }
     </script>
     <!-- 解封处理 -->
     <script type="text/javascript">
       function ReqrestUnFreezeUser(){
-        var url = 'UnFreezeUser.php?userid=' + document.getElementById('unfreeze_userid').value;
+        var url = 'UnFreezeUser.php?userid=' + document.getElementById('serarced-id').value
+                + '&server=' + document.getElementById('serarced-server').value;
         $.get(url, function(data) {
           alert(data);
         });
@@ -191,9 +227,18 @@
       function ReqrestSearchUserInfo(){
           var url = 'SearchUserInfo.php?useracc=' + document.getElementById('search-user-acc').value;
           $.get(url, function(data) {
-            alert("查询结果：" + data);
+            // alert("查询结果：" + data);
             $('#searched-user-info').html(data);
           });
+      }
+
+      function SendPrivateMail(){
+        document.getElementById('private-mail').style.display='block';
+        document.getElementById('fade').style.display='block';
+      }
+      function CancelSendPrivateMail(){
+        document.getElementById('private-mail').style.display='none';
+        document.getElementById('fade').style.display='none';
       }
     </script>
 <style>
@@ -225,35 +270,63 @@
     z-index:9999;
     overflow: auto;
 }
+.mail_content {
+    display: none;
+    position: absolute;
+    left:50%;
+    margin-left:-310px;
+    top:50%;
+    margin-top:-270px;
+    width: 620px;
+    height: 540px;
+    padding: 20px;
+    border: 5px solid orange;
+    background-color: white;
+    z-index:9999;
+    overflow: auto;
+}
+</style>
+<style>
+  /* 整体布局 */
+  .area
+  {
+      height: auto;
+      margin: auto;
+  }
+  .leftarea
+  {
+      float: left;
+      width: 220px;
+      height: auto;
+      border-right:2px solid #ccc;
+  }
+  .rightarea
+  {
+      float: left;
+      height: auto;
+      margin: auto;
+  }
 </style>
   </head>
   <body>
-  <div class="spin"></div>
-	<!-- 左侧服务器列表 -->
-    <div class="m-splitter-left left-container" style="border-right:3px solid #ccc; float:left; width:220px;">
-      <b>服务器列表</b>
-      <div id="inner-content">
-	  </div>
-    </div>
+  <!-- <div class="spin"></div> -->
+
+  <!-- 左侧服务器列表 -->
+  <div class="leftarea">
+    <!-- 根据登录状态刷新此处显示 -->
+    <div id="login_info" align="left" style="margin-left: 10px;"></div>
+    <hr />
+    <b>服务器列表</b>
+    <div id="inner-content"></div>
+  </div>
 
 	<!-- 右侧主界面区域 -->
-    <div class="main_partant_div">
-    <div id="login_info" align="right" style="margin-right: 10px;">
-      <!-- 根据登录状态刷新此处显示 -->
-    </div>
+  <div class="rightarea">
     <!-- 操作按钮 -->
-		<div id='option-ui' align='left' style="float:left; width:160px; margin-left: 10px;">
-		</div>
+		<div id='option-ui' style=" float:top; margin-left: 10px; border-bottom:2px solid #ccc; height:55px;"></div>
     <!-- 邮件发送表单 -->
-    <div id='send-mail' style="border-left:3px solid #ccc; border-top:3px solid #ccc; border-right:3px solid #ccc; border-bottom:3px solid #ccc; float:left; display:none;">
+    <div id='send-mail' style="float:top; margin-left: 10px; margin-top: 10px; display:none;">
       <!-- <form method="GET"> -->
-        <div>选择邮件类型
-          <select name="mailtype" id="mailtype">
-           <option value="1">个人邮件</option>
-           <option value="3">全服邮件</option>
-         </select>
-        </div><br>
-        玩家id：<input type="text" id="mail_userid" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="输入玩家id"/><br><br>
         开始时间：<input type="date" id="mail_beginedate" /><br>
         结束时间：<input type="date" id="mail_enddate" /><br><br>
         邮件标题：<input type="text" id="mail_title" placeholder="输入邮件标题"/><br><br>
@@ -296,7 +369,7 @@
       <!-- </form> -->
     </div>
     <!-- 封号 -->
-    <div id='freezn-account' style="border-left:3px solid #ccc; border-top:3px solid #ccc; border-right:3px solid #ccc; border-bottom:3px solid #ccc; float:left; display:none;">
+    <div id='freezn-account' style="float:top; margin-left: 10px; margin-top: 10px; display:none;">
       <!-- <form method="GET"> -->
         玩家id：<input type="text" id="freeze_userid" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="输入玩家id"/><br><br>
         截止时间：<input type="datetime-local" id="freeze_date" /><br><br>
@@ -304,29 +377,31 @@
       <!-- </form> -->
     </div>
     <!-- 踢人下线 -->
-    <div id='unfreezn-account' style="border-left:3px solid #ccc; border-top:3px solid #ccc; border-right:3px solid #ccc; border-bottom:3px solid #ccc; float:left; display:none;">
+    <div id='unfreezn-account' style="float:top; margin-left: 10px; margin-top: 10px; display:none;">
       <!-- <form method="GET"> -->
         玩家id：<input type="text" id="unfreeze_userid" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="输入玩家id"/><br><br>
        <button onclick="ReqrestUnFreezeUser()">解封</button>
       <!-- </form> -->
     </div>
     <!-- 活动设置 -->
-    <div id='set-activities' style="border-left:3px solid #ccc; border-top:3px solid #ccc; border-right:3px solid #ccc; border-bottom:3px solid #ccc; float:left; display:none;">
+    <div id='set-activities' style="float:top; margin-left: 10px; margin-top: 10px; display:none;">
       <!-- <form method="GET"> -->
-<br>
+      <br>
       <button onclick="ReqrestSetActivities()">提交修改</button>
       <!-- </form> -->
     </div>
     <!-- 查询玩家信息 -->
-    <div id='serach-user' style="border-left:3px solid #ccc; border-top:3px solid #ccc; border-right:3px solid #ccc; border-bottom:3px solid #ccc; float:left; display:none;">
+    <div id='serach-user' style="float:top; margin-left: 10px; margin-top: 10px; display:none;">
       玩家帐号：<input type="text" id="search-user-acc" placeholder="输入帐号"/><br><br>
       <button onclick="ReqrestSearchUserInfo()">查询</button><br><br>
-      <!-- </form> -->
+      <hr />
       <div>查询结果</div>
       <div id='searched-user-info'>
       </div>
     </div>
 	</div>
+
+  <!-- 登录框 -->
   <div id="light" class="white_content" align="center">
     <img src="logo.jpg">
     <form action="login.php" method="GET">
@@ -336,7 +411,54 @@
         <input type="submit" value="登录">
         <a href = "javascript:void(0)" onclick = "CancelLoginBtnClick()">取消</a>
     </form>
-    </div>
+  </div>
+
+  <!-- 私人邮件 -->
+  <div id="private-mail" class="mail_content">
+    <div>发送私人邮件</div>
+    开始时间：<input type="date" id="private_mail_beginedate" /><br>
+    结束时间：<input type="date" id="private_mail_enddate" /><br><br>
+    邮件标题：<input type="text" id="private_mail_title" placeholder="输入邮件标题"/><br><br>
+    邮件内容: <br>
+    <textarea name="content" id="private_mail_content" style="width:200px;height:80px;" placeholder="输入邮件内容"/></textarea><br/><br>
+    物品1：
+    <input type="text" id="private_item1_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品1类型"/>
+    <input type="text" id="private_item1_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品1id"/>
+    <input type="text" id="private_item1_num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品1数量"/><br>
+    物品2：
+    <input type="text" id="private_item2_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品2类型"/>
+    <input type="text" id="private_item2_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品2id"/>
+    <input type="text" id="private_item2_num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品2数量"/><br>
+    物品3：
+    <input type="text" id="private_item3_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品3类型"/>
+    <input type="text" id="private_item3_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品3id"/>
+    <input type="text" id="private_item3_num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品3数量"/><br>
+    物品4：
+    <input type="text" id="private_item4_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品4类型"/>
+    <input type="text" id="private_item4_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品4id"/>
+    <input type="text" id="private_item4_num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品4数量"/><br>
+    物品5：
+    <input type="text" id="private_item5_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品5类型"/>
+    <input type="text" id="private_item5_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品5id"/>
+    <input type="text" id="private_item5_num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品5数量"/><br>
+    物品6：
+    <input type="text" id="private_item6_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品6类型"/>
+    <input type="text" id="private_item6_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品6id"/>
+    <input type="text" id="private_item6_num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品6数量"/><br>
+    物品7：
+    <input type="text" id="private_item7_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品7类型"/>
+    <input type="text" id="private_item7_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品7id"/>
+    <input type="text" id="private_item7_num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品7数量"/><br>
+    物品8：
+    <input type="text" id="private_item8_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8类型"/>
+    <input type="text" id="private_item8_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8id"/>
+    <input type="text" id="private_item8_num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8数量"/><br>
+    落款：<input type="text" name="signature" id="private_mail_signature" placeholder="落款"/><br><br>
+    <button onclick="ReqrestSendPrivateMail()">发送</button>&nbsp;&nbsp;
+    <a href = "javascript:void(0)" onclick = "CancelSendPrivateMail()">取消</a>
+  </div>
+
+  <!-- 半透明蒙板 -->
   <div id="fade" class="black_overlay"></div>
   </body>
 </html>
