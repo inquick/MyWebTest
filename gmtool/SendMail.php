@@ -1,6 +1,7 @@
 ﻿<?php
 
 include_once 'MessageRequest.php';
+include_once 'ServerType.php';
 
 date_default_timezone_set("Asia/Shanghai");
 
@@ -20,6 +21,10 @@ if (true === empty($_GET["enddate"])) {
 
 if ($_GET["beginedate"] == $_GET["enddate"]){
   exit('邮件生效时间和失效时间不能为同一天！');
+}
+
+if ($_SESSION["ServerList"][$_SESSION['SelectedServer']['Id']]["Servers"][$_SESSION['SelectedServer']['Name']]["Type"] != ServerType::ServerType_World) {
+  exit('请先选中一个world服');
 }
 
 $beginetime = strtotime($_GET["beginedate"]);
@@ -61,9 +66,9 @@ if (strlen($_GET["item8_type"]) > 0 && strlen($_GET["item8_id"]) > 0 && strlen($
 
 if (isset($_SESSION['SelectedServer']['Id'])) {
 		$url = $_SESSION["ServerList"][$_SESSION['SelectedServer']['Id']]["Url"];
-		$result = MessageRequest::SendMail($url, (int)$_GET["userid"], (int)$_GET["mailtype"], $beginetime, $endtime, $_GET["title"], $_GET["content"], $awards, $_GET["signature"]);
+		$result = MessageRequest::SendMail($url, (int)$_GET["userid"], $_SESSION['SelectedServer']['Name'], (int)$_GET["mailtype"], $beginetime, $endtime, $_GET["title"], $_GET["content"], $awards, $_GET["signature"]);
 
-		return $result;
+		echo $result;
 }
 
 ?>

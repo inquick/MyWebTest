@@ -34,9 +34,9 @@ if (isset($_SESSION['SelectedServer']['Id']) && isset($_SESSION['SelectedServer'
 		echo '<button class="stop_menu" disabled="true">停止</button>';
 
 		// 测试代码
-		echo '<br><a href="javascript:void(0)" onclick="SearchUserInfo()">玩家查找</a>&nbsp;&nbsp;';
-		echo '<a href="javascript:void(0)" onclick="SendMail()">发送全服邮件</a>&nbsp;&nbsp;';
-		echo '<a href="javascript:void(0)" onclick="SetActivities()">配置活动</a><br>';
+		// echo '<br><a href="javascript:void(0)" onclick="SearchUserInfo()">玩家查找</a>&nbsp;&nbsp;';
+		// echo '<a href="javascript:void(0)" onclick="SendMail()">发送全服邮件</a>&nbsp;&nbsp;';
+		// echo '<a href="javascript:void(0)" onclick="SetActivities()">配置活动</a><br>';
 	}
 }
 ?>

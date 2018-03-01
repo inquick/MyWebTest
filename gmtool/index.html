@@ -52,8 +52,8 @@
         // spinner = new Spinner().spin(target);
         $.get('GetServerList.php', function(data){
           // alert('请求服务器列表：' + data);
-          RefreshServerList();
         });
+        RefreshServerList();
       }
       function RefreshServerOnlineCount(){
         $.get('GetServerOnline.php', function(data){
@@ -87,6 +87,9 @@
     </script>
     <script type="text/javascript">
       function SelectServer(e){
+  		document.getElementById("send-mail").style.display="none";
+  		document.getElementById("set-activities").style.display="none";
+  		document.getElementById("serach-user").style.display="none";
         var id = e.getAttribute("server_id");
     		$.get('SelectServer.php?SID=' + id, function(data) {
           // alert('选择服务器信息：' + data);
@@ -96,6 +99,9 @@
     </script>
     <script type="text/javascript">
       function SelectSubServer(e){
+    		document.getElementById("send-mail").style.display="none";
+    		document.getElementById("set-activities").style.display="none";
+    		document.getElementById("serach-user").style.display="none";
         var id = e.getAttribute("server_id");
         var name = e.getAttribute("server_name");
 
@@ -110,8 +116,6 @@
     <script type="text/javascript">
       function SendMail(){
         document.getElementById('send-mail').style.display='block';
-        document.getElementById('freezn-account').style.display='none';
-        document.getElementById('unfreezn-account').style.display='none';
         document.getElementById('set-activities').style.display='none';
         document.getElementById('serach-user').style.display='none';
       }
@@ -152,7 +156,7 @@
       }
 
       function ReqrestSendPrivateMail(){
-        var url = 'SendMail.php?mailtype=1&userid=' + document.getElementById('serarced-id').value
+        var url = 'SendMail.php?mailtype=1&userid=' + $("#serarced-id").attr("value")
                 + '&beginedate=' + document.getElementById('private_mail_beginedate').value
                 + '&enddate=' + document.getElementById('private_mail_enddate').value
                 + '&title=' + document.getElementById('private_mail_title').value
@@ -182,6 +186,8 @@
                 + '&item8_id=' + document.getElementById('private_item8_id').value
                 + '&item8_num=' + document.getElementById('private_item8_num').value
                 + '&signature=' + document.getElementById('private_mail_signature').value;
+
+                // alert($("#serarced-id").attr("value"));
         $.get(url, function(data) {
           alert(data);
         });
@@ -190,9 +196,10 @@
     <!-- 封号处理 -->
     <script type="text/javascript">
       function ReqrestFreezeUser(){
-        var url = 'FreezeUser.php?userid=' + document.getElementById('serarced-id').value
+        var url = 'FreezeUser.php?userid=' + $("#serarced-id").attr("value")
                 + '&date=' + document.getElementById('freeze_date').value
-                + '&server=' + document.getElementById('serarced-server').value;
+                + '&server=' + $("#serarced-server").attr("servername");
+        // alert(url);
         $.get(url, function(data) {
           alert(data);
         });
@@ -201,19 +208,11 @@
     <!-- 解封处理 -->
     <script type="text/javascript">
       function ReqrestUnFreezeUser(){
-        var url = 'UnFreezeUser.php?userid=' + document.getElementById('serarced-id').value
-                + '&server=' + document.getElementById('serarced-server').value;
+        var url = 'UnFreezeUser.php?userid=' + $("#serarced-id").attr("value")
+                + '&server=' + $("#serarced-server").attr("servername");
         $.get(url, function(data) {
           alert(data);
         });
-      }
-    </script>
-    <!-- 活动设置 -->
-    <script type="text/javascript">
-      function SetActivities(){
-        document.getElementById('send-mail').style.display='none';
-        document.getElementById('set-activities').style.display='block';
-        document.getElementById('serach-user').style.display='none';
       }
     </script>
     <!-- 查找玩家信息 -->
@@ -239,6 +238,14 @@
       function CancelSendPrivateMail(){
         document.getElementById('private-mail').style.display='none';
         document.getElementById('fade').style.display='none';
+      }
+    </script>
+    <!-- 活动设置 -->
+    <script type="text/javascript">
+      function SetActivities(){
+        document.getElementById('send-mail').style.display='none';
+        document.getElementById('set-activities').style.display='block';
+        document.getElementById('serach-user').style.display='none';
       }
     </script>
 <style>
@@ -368,25 +375,16 @@
        <button onclick="ReqrestSendMail()">发送</button>
       <!-- </form> -->
     </div>
-    <!-- 封号 -->
-    <div id='freezn-account' style="float:top; margin-left: 10px; margin-top: 10px; display:none;">
-      <!-- <form method="GET"> -->
-        玩家id：<input type="text" id="freeze_userid" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="输入玩家id"/><br><br>
-        截止时间：<input type="datetime-local" id="freeze_date" /><br><br>
-       <button onclick="ReqrestFreezeUser()">封号</button>
-      <!-- </form> -->
-    </div>
-    <!-- 踢人下线 -->
-    <div id='unfreezn-account' style="float:top; margin-left: 10px; margin-top: 10px; display:none;">
-      <!-- <form method="GET"> -->
-        玩家id：<input type="text" id="unfreeze_userid" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="输入玩家id"/><br><br>
-       <button onclick="ReqrestUnFreezeUser()">解封</button>
-      <!-- </form> -->
-    </div>
     <!-- 活动设置 -->
     <div id='set-activities' style="float:top; margin-left: 10px; margin-top: 10px; display:none;">
       <!-- <form method="GET"> -->
-      <br>
+      开始时间：<input type="datetime-local" id="activite_beginedate" /><br><br>
+      结束时间：<input type="datetime-local" id="activite_enddate" /><br><br>
+      消失时间：<input type="datetime-local" id="activite_stopdate" /><br><br>
+      活动标题：<input type="text" id="activite_title" placeholder="输入活动标题"/><br><br>
+      活动内容: <br>
+      <textarea name="content" id="activite_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br/><br>
+      活动参数：<input type="text" id="activite_params" placeholder="活动参数"/><br><br>
       <button onclick="ReqrestSetActivities()">提交修改</button>
       <!-- </form> -->
     </div>
@@ -396,6 +394,7 @@
       <button onclick="ReqrestSearchUserInfo()">查询</button><br><br>
       <hr />
       <div>查询结果</div>
+      <!-- <input type="datetime-local" id="freeze_date_test" /> -->
       <div id='searched-user-info'>
       </div>
     </div>
