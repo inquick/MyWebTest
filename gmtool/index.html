@@ -88,7 +88,7 @@
     <script type="text/javascript">
       function SelectServer(e){
   		document.getElementById("send-mail").style.display="none";
-  		document.getElementById("set-activities").style.display="none";
+  		document.getElementById("Activities").style.display="none";
   		document.getElementById("serach-user").style.display="none";
         var id = e.getAttribute("server_id");
     		$.get('SelectServer.php?SID=' + id, function(data) {
@@ -98,17 +98,27 @@
       }
     </script>
     <script type="text/javascript">
+      // function Test(){
+      //   document.getElementById('activite1_beginedate').value = '2018-03-04T15:00';
+      //   document.getElementById('activite2_title').value = '测试一下设置方法';
+      //   alert(document.getElementById('activite2_title'));
+      // }
+
+      // $('#activite1_beginedate').val('2018-03-04T15:00');
+      // $('#activite2_title').val('测试一下设置方法');
       function SelectSubServer(e){
     		document.getElementById("send-mail").style.display="none";
-    		document.getElementById("set-activities").style.display="none";
+    		document.getElementById("Activities").style.display="none";
     		document.getElementById("serach-user").style.display="none";
         var id = e.getAttribute("server_id");
         var name = e.getAttribute("server_name");
-
         // alert('选中的服务器名字：' + name);
         $.get('SelectServer.php?SID=' + id + '&SName=' + name, function(data) {
           RefreshServerOnlineCount();
           RefreshServerList();
+          // Test();
+          // alert(document.getElementById('activite1_beginedate').value);
+          // alert(document.getElementById('activite2_title').value);
         });
       }
     </script>
@@ -116,7 +126,7 @@
     <script type="text/javascript">
       function SendMail(){
         document.getElementById('send-mail').style.display='block';
-        document.getElementById('set-activities').style.display='none';
+        document.getElementById('Activities').style.display='none';
         document.getElementById('serach-user').style.display='none';
       }
 
@@ -219,7 +229,7 @@
     <script type="text/javascript">
       function SearchUserInfo(){
         document.getElementById('send-mail').style.display='none';
-        document.getElementById('set-activities').style.display='none';
+        document.getElementById('Activities').style.display='none';
         document.getElementById('serach-user').style.display='block';
       }
 
@@ -243,9 +253,43 @@
     <!-- 活动设置 -->
     <script type="text/javascript">
       function SetActivities(){
-        document.getElementById('send-mail').style.display='none';
-        document.getElementById('set-activities').style.display='block';
-        document.getElementById('serach-user').style.display='none';
+        // document.getElementById('send-mail').style.display='none';
+        // document.getElementById('Activities').style.display='none';
+        // document.getElementById('serach-user').style.display='none';
+        if (false) {
+            $.ajax({
+             url: "GetActivityList.php",
+             type: "GET",
+             dataType:"JSON",
+             //      crossDomain: true,
+             success : function (result) {
+               //        data = $.parseJSON(result);
+               //        alert(data.nickname);
+               alert("测试ajax回调");
+               alert(result);
+             }
+           });
+        }else {
+          $.get('GetActivityList.php', function(result) {
+            var data = eval('(' + result + ')');
+            for (var i = 0; i < data.length; i++) {
+              $('#activite' + (i + 1) + '_id').html('活动id:' + data[i].id);
+              var newDate = new Date();
+              newDate.setTime(data[i].starttime * 1000);
+              // alert(newDate.toJSON().substring(0, 18));
+              document.getElementById('activite' + (i + 1) + '_beginedate').value = newDate.toJSON().substring(0, 19);
+              newDate.setTime(data[i].endtime * 1000);
+              document.getElementById('activite' + (i + 1) + '_enddate').value = newDate.toJSON().substring(0, 19);
+              newDate.setTime(data[i].stoptime * 1000);
+              document.getElementById('activite' + (i + 1) + '_stopdate').value = newDate.toJSON().substring(0, 19);
+              document.getElementById('activite' + (i + 1) + '_title').value = data[i].name;
+              document.getElementById('activite' + (i + 1) + '_content').value = data[i].des;
+              document.getElementById('activite' + (i + 1) + '_params').value = data[i].params;
+
+              document.getElementById('Activities').style.display='block';
+            }
+          });
+        }
       }
     </script>
 <style>
@@ -376,17 +420,59 @@
       <!-- </form> -->
     </div>
     <!-- 活动设置 -->
-    <div id='set-activities' style="float:top; margin-left: 10px; margin-top: 10px; display:none;">
-      <!-- <form method="GET"> -->
-      开始时间：<input type="datetime-local" id="activite_beginedate" /><br><br>
-      结束时间：<input type="datetime-local" id="activite_enddate" /><br><br>
-      消失时间：<input type="datetime-local" id="activite_stopdate" /><br><br>
-      活动标题：<input type="text" id="activite_title" placeholder="输入活动标题"/><br><br>
-      活动内容: <br>
-      <textarea name="content" id="activite_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br/><br>
-      活动参数：<input type="text" id="activite_params" placeholder="活动参数"/><br><br>
-      <button onclick="ReqrestSetActivities()">提交修改</button>
-      <!-- </form> -->
+    <div id='Activities' style="display:block;">
+      <table border="1px" cellpadding="0" cellspacing="0" style="border-left-style:solid; border-bottom-style:none;border-right-style:solid;border-top-style:none">
+        <tr>
+          <td>
+            <div id='set-activities1'>
+              <!-- <form method="GET"> -->
+              <div id='activite1_id'>活动id:</div>
+              开始时间：<input type="datetime-local" id="activite1_beginedate" /><br><br>
+              结束时间：<input type="datetime-local" id="activite1_enddate" /><br><br>
+              消失时间：<input type="datetime-local" id="activite1_stopdate" /><br><br>
+              活动标题：<input type="text" id="activite1_title" placeholder="输入活动标题"/><br><br>
+              活动内容: <br>
+              <textarea name="content" id="activite1_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br/><br>
+              活动参数：<br>
+              <textarea name="content" id="activite1_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br/><br>
+              <button onclick="ReqrestSetActivities1()">提交修改</button>
+              <!-- </form> -->
+            </div>
+          </td>
+          <td>
+            <div id='set-activities2'>
+              <!-- <form method="GET"> -->
+              <div id='activite2_id'>活动id:</div>
+              开始时间：<input type="datetime-local" id="activite2_beginedate" /><br><br>
+              结束时间：<input type="datetime-local" id="activite2_enddate" /><br><br>
+              消失时间：<input type="datetime-local" id="activite2_stopdate" /><br><br>
+              活动标题：<input type="text" id="activite2_title" placeholder="输入活动标题"/><br><br>
+              活动内容: <br>
+              <textarea name="content" id="activite2_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br/><br>
+              活动参数：<br>
+              <textarea name="content" id="activite2_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br/><br>
+              <button onclick="ReqrestSetActivities2()">提交修改</button>
+              <!-- </form> -->
+            </div>
+          </td>
+          <td>
+            <div id='set-activities3'>
+              <!-- <form method="GET"> -->
+              <div id='activite3_id'>活动id:</div>
+              开始时间：<input type="datetime-local" id="activite3_beginedate" /><br><br>
+              结束时间：<input type="datetime-local" id="activite3_enddate" /><br><br>
+              消失时间：<input type="datetime-local" id="activite3_stopdate" /><br><br>
+              活动标题：<input type="text" id="activite3_title" placeholder="输入活动标题"/><br><br>
+              活动内容: <br>
+              <textarea name="content" id="activite3_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br/><br>
+              活动参数：<br>
+              <textarea name="content" id="activite3_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br/><br>
+              <button onclick="ReqrestSetActivities3()">提交修改</button>
+              <!-- </form> -->
+            </div>
+          </td>
+        </tr>
+      </table>
     </div>
     <!-- 查询玩家信息 -->
     <div id='serach-user' style="float:top; margin-left: 10px; margin-top: 10px; display:none;">

@@ -184,6 +184,100 @@ class MessageRequest{
 		$response = json_decode($result);
 		echo $response->Result;
 	}
+	/**
+	 * 获取活动列表
+	 */
+	static function GetActivities($url, $server)
+	{
+		if (!isset($_SESSION['UserName'])){
+			echo '请先登录';
+			return;
+		}
+		$data = array('Msg_ID' => MessageID::MsgID_GetActivities, 'Server_Name' => $server, );
+		$result = http_post($url, json_encode($data));
+
+		if (!$result){
+			// echo "请求失败！";
+
+			$test = array();
+			for ($i=0; $i < 3; $i++) {
+				$test[$i] = array();
+				$test[$i]['id'] = $i;
+				$test[$i]['type'] = 1;
+				$test[$i]['starttime'] = 1517414400;
+				$test[$i]['endtime'] = 1520179200;
+				$test[$i]['stoptime'] = 15203520;
+				$test[$i]['name'] = '活动' . $i;
+				$test[$i]['des'] = '描述' . $i;
+				$test[$i]['params'] = '红方#1#蓝方#2#欢迎加入麦辣鸡翅与香辣鸡翅的庆典对抗#10#0';
+			}
+			echo json_encode($test);
+			return;
+		}
+
+		$response = json_decode($result);
+		if ($response->Result == 'SUCCESS') {
+			$ActivityList = array();
+			while(list($index, $activityInfo) = each($response->ActivityList)){
+				$actid = $activityInfo->Activity_ID;
+				$ActivityList[$actid] = array();
+				$ActivityList[$actid]['id'] = (int)$actid;
+				$ActivityList[$actid]['type'] = (int)$activityInfo->Activity_Type;
+				$ActivityList[$actid]['starttime'] = (int)$activityInfo->Activity_StartTime;
+				$ActivityList[$actid]['endtime'] = (int)$activityInfo->Activity_EndTime;
+				$ActivityList[$actid]['stoptime'] = (int)$activityInfo->Activity_StopTime;
+				$ActivityList[$actid]['name'] = $activityInfo->Activity_Name;
+				$ActivityList[$actid]['des'] = $activityInfo->Activity_Des;
+				$ActivityList[$actid]['params'] = $activityInfo->Activity_Params;
+			}
+
+			$_SESSION["Activities"] = $ActivityList;
+
+		  return json_encode($ActivityList);
+		}
+		echo $response->Result;
+	}
+	/**
+	 * 设置活动
+	 */
+	static function SetActivity($url, $server, $activityId, $type, $starttime, $endtime, $stoptime, $name, $des, $params)
+	{
+		if (!isset($_SESSION['UserName'])){
+			echo '请先登录';
+			return;
+		}
+		// 活动通用配置属性
+// message ActivityInfo
+// {
+// 	required uint32 id			= 1; // 活动id
+// 	required ACTIVITYTYPE type	= 2; // 活动类型，只能选择已经开发出来的活动类型
+// 	required int64 starttime	= 3; // 开始时间
+// 	required int64 endtime		= 4; // 结束时间
+// 	required int64 stoptime		= 5; // 停留时间
+// 	required string name		= 6; // 活动标题
+// 	required string des			= 7; // 活动内容
+// 	required string params		= 8; // 活动参数（每个活动参数可能都不一样，需要商定参数数量和格式）
+// }
+		$data = array('Msg_ID' => MessageID::MsgID_SetActivity,
+									'Server_Name' => $server,
+									'Activity_ID' => $activityId,
+									'Activity_Type' => $type,
+									'Activity_StartTime' => $starttime,
+									'Activity_EndTime' => $endtime,
+									'Activity_StopTime' => $stoptime,
+									'Activity_Name' => $name,
+									'Activity_Des' => $des,
+									'Activity_Params' => $params,);
+		$result = http_post($url, json_encode($data));
+
+		if (!$result){
+			echo "请求失败！";
+			return;
+		}
+
+		$response = json_decode($result);
+		echo $response->Result;
+	}
 }
 
 ?>

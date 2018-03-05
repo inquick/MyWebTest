@@ -19,9 +19,15 @@ class MessageID
 
 	 //解除封号
 	const MsgID_UnFreeznUser    = 10005;
-	
+
 	 //发送邮件
 	const MsgID_SendMail        = 10006;
+
+	// 活动列表
+	const MsgID_GetActivities   = 10007;
+
+	 // 配置活动
+	const MsgID_SetActivity     = 10008;
 }
 
 ?>
