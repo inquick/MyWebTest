@@ -4,33 +4,24 @@ include_once 'http-curl.php';
 
 session_start();
 
-if (!isset($_SESSION['login_ok']))
+if (!isset($_SESSION['acc_psd']))
 {
 	echo "<script language=javascript>alert ('要访问的页面需要先登录。');</script>";
 	$_SESSION['userurl'] = $_SERVER['REQUEST_URI'];
 	echo '<script language=javascript>window.location.href="index.html"</script>';
 }
 
-// 把请求服务器ip和端口取出来存到session中
-if (is_file('config/config.json'))
-{
-	$fp = fopen('config/config.json', 'r');
-	$data = json_decode(fread($fp, filesize('config/config.json')));
-	fclose($fp);
-
-	$_SESSION['YingBaUrl'] = 'http://' . $data->ip . ':' . $data->port . '/YinbaGame/Block2';
-}
-
 // $beginetime = microtime(true);
 
 // echo $_SESSION['YingBaUrl'] . '?message=getAppList';
 
-$result = http_get($_SESSION['YingBaUrl'] . '?message=getAppList');
+$result = http_get($_SESSION['YingBaUrl'] . '?message=getAppList' . $_SESSION['acc_psd']);
 
 // $elapsed = microtime(true) - $beginetime;
 // echo "That took $elapsed seconds.\n";
 
 $js = null;
+// var_dump($result);
 if ($result && strlen($result) > 0)
 {
 	$js = json_decode($result);
@@ -49,7 +40,11 @@ if ($result && strlen($result) > 0)
     function BindUrl(){
 		// alert('调用BindUrl()！！');
 		var form = document.forms['f1'];
-		var bindurl = 'bind.php?wechatid=' + form.wechatid.value + '&wechatname=' + form.wechatname.value + '&appidlist=' + $('#appidlist').val();
+		var wecahtid = 0;
+		if (form.wechatid) {
+			wecahtid = form.wechatid.value;
+		}
+		var bindurl = 'bind.php?wechatid=' + wecahtid + '&wechatname=' + form.wechatname.value + '&appidlist=' + $('#appidlist').val();
 		$.get( bindurl, function(data) {
 			// alert(data);
             $('#txt').html(data);
@@ -78,6 +73,8 @@ if ($result && strlen($result) > 0)
 			$LINE_COUNT = 8;
 
 			$AppListArray = array();
+
+			// var_dump($js);
 
 			for ($i=0; $i< count($js->data->app_list->value); $i++)
 			{
@@ -108,8 +105,15 @@ if ($result && strlen($result) > 0)
 			echo '</script>';
 			echo '<div>';
 			echo '<br>';
-			echo '微信公众号ID：<input type="text" name="wechatid" /> 微信公众号名：<input type="text" name="wechatname" /> ';
-			echo '<input type="button" value="绑定" onclick="BindUrl()">';
+			if ($_SESSION['acc_level'] == 9) {
+				echo '微信公众号ID：<input type="text" name="wechatid" /> ';
+				echo '微信公众号名：<input type="text" name="wechatname" /> ';
+				echo '<input type="button" value="绑定" onclick="BindUrl()">';
+			}
+			else {
+				echo '微信公众号名：<input type="text" name="wechatname" /> ';
+				echo '<input type="button" value="获取分享链接" onclick="BindUrl()">';
+			}
 
 		}else
 		{

@@ -1,4 +1,5 @@
 ﻿<?php
+include_once 'http-curl.php';
 
 session_start();
 
@@ -10,42 +11,39 @@ if (empty($_GET['password']) || ( $_GET['password'] == null )) {
 	exit('请输入密码');
 }
 
+// 把请求服务器ip和端口取出来存到session中
+if (is_file('config/config.json'))
+{
+	$fp = fopen('config/config.json', 'r');
+	$data = json_decode(fread($fp, filesize('config/config.json')));
+	fclose($fp);
+
+	$_SESSION['YingBaUrl'] = 'http://' . $data->ip . ':' . $data->port . '/YinbaGame/Block2';
+}
+
 $InputUserName = $_GET['username'];
 $InputPassWord = $_GET['password'];
 
-$result = '';
 
-if (is_file('config/accounts.json'))
-{
-	// 获取帐号信息
-	$fp = fopen('config/accounts.json', 'r');
-	$data = json_decode(fread($fp, filesize('config/accounts.json')));
-	fclose($fp);
+$url = $_SESSION['YingBaUrl'] . '?message=logIn&account=' . $InputUserName . '&password=' . $InputPassWord;
 
-	$AccArray = array();
-	for ($i=0; $i<count($data); $i++)
-	{
-		$AccArray[$data[$i]->acc] = $data[$i]->psd;
-	}
-	// 判断帐号信息
-	if (isset($AccArray[$InputUserName]))
-	{
-		if ($AccArray[$InputUserName] == $InputPassWord){
-			$_SESSION['login_ok'] = true;
-			header('Location: YingbaGame.php');
-			exit();
-		}else {
-			exit('帐号密码不匹配');
-		}
-	}
-	else
-	{
-		exit('不存在的帐号');
-	}
-}
-else
+$result = http_get($url);
+
+// echo $url . '<br>';
+// echo var_dump($result);
+
+if ($result && strlen($result) > 0)
 {
-	exit('不存在的帐号');
+  //var_dump($result);
+  $js = json_decode($result);
+	if ($js->ret != 0) {
+		echo $js->msg;
+	}else {
+		$_SESSION['acc_psd'] = '&account=' . $InputUserName . '&password=' . $InputPassWord;
+		$_SESSION['acc_wechatid'] = $InputUserName;
+		$_SESSION['acc_level'] = $js->level;
+		echo '<script language=javascript>window.location.href="YingbaGame.php"</script>';
+	}
 }
 
 ?>

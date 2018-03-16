@@ -12,11 +12,18 @@ if (empty($_GET['enddate']) || ( $_GET['enddate'] == null )) {
 
 session_start();
 
+if (!isset($_SESSION['acc_psd']))
+{
+	echo "<script language=javascript>alert ('要访问的页面需要先登录。');</script>";
+	$_SESSION['userurl'] = $_SERVER['REQUEST_URI'];
+	echo '<script language=javascript>window.location.href="index.php"</script>';
+}
+
 $BegineTime = str_replace('-', '', $_GET['beginedate']);
 $EndTime = str_replace('-', '', $_GET['enddate']);
 
 // echo $BegineTime . '  ' . $EndTime;
-$url = $_SESSION['YingBaUrl'] . '?message=getReportForm&begin=' . $BegineTime . '&end=' . $EndTime;
+$url = $_SESSION['YingBaUrl'] . '?message=getReportForm&begin=' . $BegineTime . '&end=' . $EndTime . $_SESSION['acc_psd'];
 
 // echo $url;
 
@@ -32,7 +39,7 @@ if ($result && strlen($result) > 0)
   $js = json_decode($result);
   if ($js->ret == 0)
   {
-    //echo var_dump($js->data->lst_data->value);
+    // echo var_dump($js->data->lst_data->value);
     // echo '' . count($js->data->lst_data->value);
     for ($i=0; $i<count($js->data->lst_data->value); $i++)
     {
