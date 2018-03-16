@@ -12,10 +12,11 @@ if (empty($_GET['password']) || ( $_GET['password'] == null )) {
 }
 
 // 把请求服务器ip和端口取出来存到session中
-if (is_file('config/config.json'))
+$ConfigPath = '../../yingba/config/config.json';
+if (is_file($ConfigPath))
 {
-	$fp = fopen('config/config.json', 'r');
-	$data = json_decode(fread($fp, filesize('config/config.json')));
+	$fp = fopen($ConfigPath, 'r');
+	$data = json_decode(fread($fp, filesize($ConfigPath)));
 	fclose($fp);
 
 	$_SESSION['YingBaUrl'] = 'http://' . $data->ip . ':' . $data->port . '/YinbaGame/Block2';
