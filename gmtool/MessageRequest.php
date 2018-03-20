@@ -290,31 +290,34 @@ class MessageRequest{
 			echo '请先登录';
 			return;
 		}
-
+		$result = '';
 		$msgid = MessageID::MsgID_StartServer;
 		switch ($cmd) {
 			case 'Start':
 				$msgid = MessageID::MsgID_StartServer;
+				$result = $server . ' 启动 ';
 				break;
 			case 'Stop':
 				$msgid = MessageID::MsgID_StopServer;
+				$result = $server . ' 关闭 ';
 				break;
 			case 'Update':
 				$msgid = MessageID::MsgID_UpdateServer;
+				$result = $server . ' 更新 ';
 				break;
 		}
 		MessageID::MsgID_StopServer
 		$data = array('Msg_ID' => $msgid, 'Server_Name' => $server,);
-		$result = http_post($url, json_encode($data));
+		$resp = http_post($url, json_encode($data));
 
-		if (!$result){
+		if (!$resp){
 			echo "请求失败！";
 			return;
 		}
 
 		// var_dump(json_encode($data));
-		$response = json_decode($result);
-		echo $response->Result;
+		$response = json_decode($resp);
+		echo $result . $response->Result . '<br>' . $response->Value;
 	}
 }
 
