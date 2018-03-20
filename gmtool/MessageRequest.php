@@ -174,7 +174,7 @@ class MessageRequest{
 									'Mail_signature' => $signature,);
 		$result = http_post($url, json_encode($data));
 
-		// var_dump(json_encode($data));
+		var_dump(json_encode($data));
 
 		if (!$result){
 			echo "请求失败！";
@@ -197,38 +197,39 @@ class MessageRequest{
 		$result = http_post($url, json_encode($data));
 
 		if (!$result){
-			// echo "请求失败！";
-
-			$test = array();
-			for ($i=0; $i < 3; $i++) {
-				$test[$i] = array();
-				$test[$i]['id'] = $i;
-				$test[$i]['type'] = 1;
-				$test[$i]['starttime'] = 1517414400;
-				$test[$i]['endtime'] = 1520179200;
-				$test[$i]['stoptime'] = 15203520;
-				$test[$i]['name'] = '活动' . $i;
-				$test[$i]['des'] = '描述' . $i;
-				$test[$i]['params'] = '红方#1#蓝方#2#欢迎加入麦辣鸡翅与香辣鸡翅的庆典对抗#10#0';
-			}
-			echo json_encode($test);
+			echo "请求失败！";
+			// $test = array();
+			// for ($i=0; $i < 3; $i++) {
+			// 	$test[$i] = array();
+			// 	$test[$i]['id'] = $i;
+			// 	$test[$i]['type'] = 1;
+			// 	$test[$i]['starttime'] = 1517414400;
+			// 	$test[$i]['endtime'] = 1520179200;
+			// 	$test[$i]['stoptime'] = 15203520;
+			// 	$test[$i]['name'] = '活动' . $i;
+			// 	$test[$i]['des'] = '描述' . $i;
+			// 	$test[$i]['params'] = '红方#1#蓝方#2#欢迎加入麦辣鸡翅与香辣鸡翅的庆典对抗#10#0';
+			// }
+			// echo json_encode($test);
 			return;
 		}
 
 		$response = json_decode($result);
 		if ($response->Result == 'SUCCESS') {
 			$ActivityList = array();
+			$index = 0;
 			while(list($index, $activityInfo) = each($response->ActivityList)){
 				$actid = $activityInfo->Activity_ID;
-				$ActivityList[$actid] = array();
-				$ActivityList[$actid]['id'] = (int)$actid;
-				$ActivityList[$actid]['type'] = (int)$activityInfo->Activity_Type;
-				$ActivityList[$actid]['starttime'] = (int)$activityInfo->Activity_StartTime;
-				$ActivityList[$actid]['endtime'] = (int)$activityInfo->Activity_EndTime;
-				$ActivityList[$actid]['stoptime'] = (int)$activityInfo->Activity_StopTime;
-				$ActivityList[$actid]['name'] = $activityInfo->Activity_Name;
-				$ActivityList[$actid]['des'] = $activityInfo->Activity_Des;
-				$ActivityList[$actid]['params'] = $activityInfo->Activity_Params;
+				$ActivityList[$index] = array();
+				$ActivityList[$index]['id'] = (int)$actid;
+				$ActivityList[$index]['type'] = (int)$activityInfo->Activity_Type;
+				$ActivityList[$index]['starttime'] = (int)$activityInfo->Activity_StartTime;
+				$ActivityList[$index]['endtime'] = (int)$activityInfo->Activity_EndTime;
+				$ActivityList[$index]['stoptime'] = (int)$activityInfo->Activity_StopTime;
+				$ActivityList[$index]['name'] = $activityInfo->Activity_Name;
+				$ActivityList[$index]['des'] = $activityInfo->Activity_Des;
+				$ActivityList[$index]['params'] = $activityInfo->Activity_Params;
+				$index += 1;
 			}
 
 			$_SESSION["Activities"] = $ActivityList;
@@ -275,6 +276,43 @@ class MessageRequest{
 			return;
 		}
 
+		// echo var_dump(json_encode($data));
+
+		$response = json_decode($result);
+		echo $response->Result;
+	}
+	/**
+	 * 服务器操作（启动、关闭、更新）
+	 */
+	static function OperatorServer($url, $server, $cmd)
+	{
+		if (!isset($_SESSION['UserName'])){
+			echo '请先登录';
+			return;
+		}
+
+		$msgid = MessageID::MsgID_StartServer;
+		switch ($cmd) {
+			case 'Start':
+				$msgid = MessageID::MsgID_StartServer;
+				break;
+			case 'Stop':
+				$msgid = MessageID::MsgID_StopServer;
+				break;
+			case 'Update':
+				$msgid = MessageID::MsgID_UpdateServer;
+				break;
+		}
+		MessageID::MsgID_StopServer
+		$data = array('Msg_ID' => $msgid, 'Server_Name' => $server,);
+		$result = http_post($url, json_encode($data));
+
+		if (!$result){
+			echo "请求失败！";
+			return;
+		}
+
+		// var_dump(json_encode($data));
 		$response = json_decode($result);
 		echo $response->Result;
 	}

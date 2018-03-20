@@ -12,7 +12,8 @@ if (empty($_GET['password']) || ( $_GET['password'] == null )) {
 }
 
 // 把请求服务器ip和端口取出来存到session中
-$ConfigPath = '../../yingba/config/config.json';
+//$ConfigPath = '../../yingba/config/config.json';
+$ConfigPath = 'config/config.json';
 if (is_file($ConfigPath))
 {
 	$fp = fopen($ConfigPath, 'r');

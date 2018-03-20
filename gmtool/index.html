@@ -99,13 +99,13 @@
     </script>
     <script type="text/javascript">
       // function Test(){
-      //   document.getElementById('activite1_beginedate').value = '2018-03-04T15:00';
-      //   document.getElementById('activite2_title').value = '测试一下设置方法';
-      //   alert(document.getElementById('activite2_title'));
+      //   document.getElementById('activite0_beginedate').value = '2018-03-04T15:00';
+      //   document.getElementById('activite1_title').value = '测试一下设置方法';
+      //   alert(document.getElementById('activite1_title'));
       // }
 
-      // $('#activite1_beginedate').val('2018-03-04T15:00');
-      // $('#activite2_title').val('测试一下设置方法');
+      // $('#activite0_beginedate').val('2018-03-04T15:00');
+      // $('#activite1_title').val('测试一下设置方法');
       function SelectSubServer(e){
     		document.getElementById("send-mail").style.display="none";
     		document.getElementById("Activities").style.display="none";
@@ -117,8 +117,8 @@
           RefreshServerOnlineCount();
           RefreshServerList();
           // Test();
-          // alert(document.getElementById('activite1_beginedate').value);
-          // alert(document.getElementById('activite2_title').value);
+          // alert(document.getElementById('activite0_beginedate').value);
+          // alert(document.getElementById('activite1_title').value);
         });
       }
     </script>
@@ -271,25 +271,77 @@
            });
         }else {
           $.get('GetActivityList.php', function(result) {
+            // alert(result);
+            document.getElementById('send-mail').style.display='none';
+            document.getElementById('Activities').style.display='block';
+            document.getElementById('serach-user').style.display='none';
             var data = eval('(' + result + ')');
             for (var i = 0; i < data.length; i++) {
-              $('#activite' + (i + 1) + '_id').html('活动id:' + data[i].id);
+              $('#activite' + i + '_id').html('活动id:' + data[i].id);
               var newDate = new Date();
               newDate.setTime(data[i].starttime * 1000);
               // alert(newDate.toJSON().substring(0, 18));
-              document.getElementById('activite' + (i + 1) + '_beginedate').value = newDate.toJSON().substring(0, 19);
+              document.getElementById('activite' + i + '_beginedate').value = newDate.toJSON().substring(0, 19);
               newDate.setTime(data[i].endtime * 1000);
-              document.getElementById('activite' + (i + 1) + '_enddate').value = newDate.toJSON().substring(0, 19);
+              document.getElementById('activite' + i + '_enddate').value = newDate.toJSON().substring(0, 19);
               newDate.setTime(data[i].stoptime * 1000);
-              document.getElementById('activite' + (i + 1) + '_stopdate').value = newDate.toJSON().substring(0, 19);
-              document.getElementById('activite' + (i + 1) + '_title').value = data[i].name;
-              document.getElementById('activite' + (i + 1) + '_content').value = data[i].des;
-              document.getElementById('activite' + (i + 1) + '_params').value = data[i].params;
-
-              document.getElementById('Activities').style.display='block';
+              document.getElementById('activite' + i + '_stopdate').value = newDate.toJSON().substring(0, 19);
+              document.getElementById('activite' + i + '_title').value = data[i].name;
+              document.getElementById('activite' + i + '_content').value = data[i].des;
+              document.getElementById('activite' + i + '_params').value = data[i].params;
             }
           });
         }
+      }
+    </script>
+    <script type="text/javascript">
+      function ReqrestSetActivities0(){
+        RequestSetActivity(0);
+      }
+      function ReqrestSetActivities1(){
+        RequestSetActivity(1);
+      }
+      function ReqrestSetActivities2(){
+        RequestSetActivity(2);
+      }
+
+      function RequestSetActivity(index){
+        // alert('设置活动 ： ' + index);
+        // alert('控件名：' + 'activite' + index + '_beginedate');
+        // alert('保单数据beginedate ： ' + document.getElementById('activite' + index + '_beginedate').value);
+        // alert('保单数据enddate ： ' + document.getElementById('activite' + index + '_enddate').value);
+        // alert('保单数据stopdate ： ' + document.getElementById('activite' + index + '_stopdate').value);
+        // alert('保单数据title ： ' + document.getElementById('activite' + index + '_title').value);
+        // alert('保单数据content ： ' + document.getElementById('activite' + index + '_content').value);
+        // alert('表单数据params ： ' + document.getElementById('activite' + index + '_params').value);
+        var url = 'SetActivity.php?index=' + index
+                + '&starttime=' + document.getElementById('activite' + index + '_beginedate').value
+                + '&endtime=' + document.getElementById('activite' + index + '_enddate').value
+                + '&stoptime=' + document.getElementById('activite' + index + '_stopdate').value
+                + '&name=' + document.getElementById('activite' + index + '_title').value
+                + '&des=' + document.getElementById('activite' + index + '_content').value
+                + '&params=' + document.getElementById('activite' + index + '_params').value.replace(/\#/g, "_");
+        // alert('链接地址 ： ' + url);
+        $.get(url, function(result) {
+            alert(result);
+        });
+      }
+    </script>
+    <script type="text/javascript">
+      function StartServer(){
+        OperatorServer("Start");
+      }
+      function StopServer(){
+        OperatorServer("Stop");
+      }
+      function StopServer(){
+        OperatorServer("Update");
+      }
+
+      function OperatorServer(cmd){
+        $.get('OperatorServer.php?cmd=' + cmd, function(result) {
+            alert(result);
+        });
       }
     </script>
 <style>
@@ -426,6 +478,22 @@
           <td>
             <div id='set-activities1'>
               <!-- <form method="GET"> -->
+              <div id='activite0_id'>活动id:</div>
+              开始时间：<input type="datetime-local" id="activite0_beginedate" /><br><br>
+              结束时间：<input type="datetime-local" id="activite0_enddate" /><br><br>
+              消失时间：<input type="datetime-local" id="activite0_stopdate" /><br><br>
+              活动标题：<input type="text" id="activite0_title" placeholder="输入活动标题"/><br><br>
+              活动内容: <br>
+              <textarea name="content" id="activite0_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br/><br>
+              活动参数：<br>
+              <textarea name="content" id="activite0_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br/><br>
+              <button onclick="ReqrestSetActivities0()">提交修改</button>
+              <!-- </form> -->
+            </div>
+          </td>
+          <td>
+            <div id='set-activities2'>
+              <!-- <form method="GET"> -->
               <div id='activite1_id'>活动id:</div>
               开始时间：<input type="datetime-local" id="activite1_beginedate" /><br><br>
               结束时间：<input type="datetime-local" id="activite1_enddate" /><br><br>
@@ -440,7 +508,7 @@
             </div>
           </td>
           <td>
-            <div id='set-activities2'>
+            <div id='set-activities3'>
               <!-- <form method="GET"> -->
               <div id='activite2_id'>活动id:</div>
               开始时间：<input type="datetime-local" id="activite2_beginedate" /><br><br>
@@ -452,22 +520,6 @@
               活动参数：<br>
               <textarea name="content" id="activite2_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br/><br>
               <button onclick="ReqrestSetActivities2()">提交修改</button>
-              <!-- </form> -->
-            </div>
-          </td>
-          <td>
-            <div id='set-activities3'>
-              <!-- <form method="GET"> -->
-              <div id='activite3_id'>活动id:</div>
-              开始时间：<input type="datetime-local" id="activite3_beginedate" /><br><br>
-              结束时间：<input type="datetime-local" id="activite3_enddate" /><br><br>
-              消失时间：<input type="datetime-local" id="activite3_stopdate" /><br><br>
-              活动标题：<input type="text" id="activite3_title" placeholder="输入活动标题"/><br><br>
-              活动内容: <br>
-              <textarea name="content" id="activite3_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br/><br>
-              活动参数：<br>
-              <textarea name="content" id="activite3_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br/><br>
-              <button onclick="ReqrestSetActivities3()">提交修改</button>
               <!-- </form> -->
             </div>
           </td>

@@ -28,6 +28,15 @@ class MessageID
 
 	 // 配置活动
 	const MsgID_SetActivity     = 10008;
+
+	// 启动服务器
+	const MsgID_StartServer   = 10009;
+
+	 // 关闭服务器
+	const MsgID_StopServer     = 10010;
+
+	 // 更新服务器
+	const MsgID_UpdateServer     = 10011;
 }
 
 ?>
