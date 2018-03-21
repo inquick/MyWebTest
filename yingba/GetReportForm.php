@@ -72,7 +72,7 @@ if ($result && strlen($result) > 0)
   }
   else
   {
-    echo $js->msg;
+    echo '错误码:' . $js->ret . '<br>' . $js->msg;
   }
 }
 else

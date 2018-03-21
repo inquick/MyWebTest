@@ -110,10 +110,11 @@ if ($result && strlen($result) > 0)
 				echo '微信公众号名：<input type="text" name="wechatname" /> ';
 				echo '<input type="button" value="绑定" onclick="BindUrl()">';
 			}
-			else {
-				echo '微信公众号名：<input type="text" name="wechatname" /> ';
-				echo '<input type="button" value="获取分享链接" onclick="BindUrl()">';
-			}
+			// 子账号屏蔽获取链接功能
+			// else {
+			// 	echo '微信公众号名：<input type="text" name="wechatname" /> ';
+			// 	echo '<input type="button" value="获取分享链接" onclick="BindUrl()">';
+			// }
 
 		}else
 		{
