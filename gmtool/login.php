@@ -36,7 +36,7 @@ echo '不存在的帐号';
 
 function LoadAccountsJson()
 {
-	$filename = 'config/accounts.json';
+	$filename = '../../GMTool/accounts.json';
 	if (is_file($filename))
 	{
 		$fp = fopen($filename, 'r');

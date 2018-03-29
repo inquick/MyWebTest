@@ -24,7 +24,7 @@ if (isset($_SESSION['SelectedServer']['Id']) && isset($_SESSION['SelectedServer'
 				echo '<a href="javascript:void(0)" onclick="SendMail()">发送全服邮件</a>&nbsp;&nbsp;';
 				break;
 			case ServerType::ServerType_Match:
-				echo '<a href="javascript:void(0)" onclick="SetActivities()">配置活动</a><br>';
+				echo '<br><a href="javascript:void(0)" onclick="SetActivities()">配置活动</a><br>';
 				break;
 			default:
 				# code...

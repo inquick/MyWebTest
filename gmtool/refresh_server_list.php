@@ -52,10 +52,11 @@ while (list($id, $info) = each($ServerList))
 
 function LoadJson()
 {
-	if (is_file('config/serverlist.json'))
+	$path = '../../GMTool/serverlist.json';
+	if (is_file($path))
 	{
-		$fp = fopen('config/serverlist.json', 'r');
-		$source = fread($fp, filesize('config/serverlist.json'));
+		$fp = fopen($path, 'r');
+		$source = fread($fp, filesize($path));
 		$data = json_decode($source);
 		fclose($fp);
 		if ($data)

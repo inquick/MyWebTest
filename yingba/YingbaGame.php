@@ -15,16 +15,14 @@ if (!isset($_SESSION['acc_psd']))
 
 // echo $_SESSION['YingBaUrl'] . '?message=getAppList';
 
-$result = http_get($_SESSION['YingBaUrl'] . '?message=getAppList' . $_SESSION['acc_psd']);
-
-// $elapsed = microtime(true) - $beginetime;
-// echo "That took $elapsed seconds.\n";
-
 $js = null;
-// var_dump($result);
-if ($result && strlen($result) > 0)
-{
-	$js = json_decode($result);
+//
+if ($_SESSION['acc_level'] == 9) {
+	$result = http_get($_SESSION['YingBaUrl'] . '?message=getAppList' . $_SESSION['acc_psd']);
+	if ($result && strlen($result) > 0)
+	{
+		$js = json_decode($result);
+	}
 }
 
 ?>
@@ -63,11 +61,13 @@ if ($result && strlen($result) > 0)
 	</script>
 </head>
 <body>
-	<div>
-   <form id="f1" name="f1" method="POST">
 <?php
+	if ($_SESSION['acc_level'] == 9) {
 		if ($js)
 		{
+			// 子账号屏蔽获取链接功能, 只有主帐号才有
+			echo '<div>';
+		 	echo '<form id="f1" name="f1" method="POST">';
 			echo '<h1>选择要代理的APP：</h1>';
 			echo '<td><table border="1">';
 			$LINE_COUNT = 8;
@@ -105,26 +105,17 @@ if ($result && strlen($result) > 0)
 			echo '</script>';
 			echo '<div>';
 			echo '<br>';
-			if ($_SESSION['acc_level'] == 9) {
-				echo '微信公众号ID：<input type="text" name="wechatid" /> ';
-				echo '微信公众号名：<input type="text" name="wechatname" /> ';
-				echo '<input type="button" value="绑定" onclick="BindUrl()">';
-			}
-			// 子账号屏蔽获取链接功能
-			// else {
-			// 	echo '微信公众号名：<input type="text" name="wechatname" /> ';
-			// 	echo '<input type="button" value="获取分享链接" onclick="BindUrl()">';
-			// }
-
-		}else
-		{
-			echo '获取可绑定应用列表失败';
+			echo '微信公众号ID：<input type="text" name="wechatid" /> ';
+			echo '微信公众号名：<input type="text" name="wechatname" /> ';
+			echo '<input type="button" value="绑定" onclick="BindUrl()">';
+			echo '</form>';
+			echo '<HR align=center color=#987cb9 SIZE=1>';
+			echo '</div>';
+		}
 		}
 ?>
-   </form>
-	 <HR align=center color=#987cb9 SIZE=1>
- 		</div>
 	 <div>
+	 <h1>查询记录</h1>
 	 <form id="f2" method="post">
 		 开始时间：<input type="date" name="beginedate" /> 结束时间：<input type="date" name="enddate" />
 	 <input type="button" value="查看记录" onclick="GetReportForm()">

@@ -124,6 +124,14 @@
     </script>
     <!-- 邮件发送 -->
     <script type="text/javascript">
+      function AwardsLimitLength(obj){
+      	var val=$(obj).val().length;
+      	if(val > 1024){
+      		alert("奖励最多支持1024个字符！");
+      		$(obj).val($(obj).val().substring(0, 1024))
+      	}
+      }
+
       function SendMail(){
         document.getElementById('send-mail').style.display='block';
         document.getElementById('Activities').style.display='none';
@@ -159,7 +167,8 @@
                 + '&item8_type=' + document.getElementById('item8_type').value
                 + '&item8_id=' + document.getElementById('item8_id').value
                 + '&item8_num=' + document.getElementById('item8_num').value
-                + '&signature=' + document.getElementById('mail_signature').value;
+                + '&signature=' + document.getElementById('mail_signature').value
+                + '&customize_awards=' + document.getElementById('customize_awards').value;
         $.get(url, function(data) {
           alert(data);
         });
@@ -195,7 +204,8 @@
                 + '&item8_type=' + document.getElementById('private_item8_type').value
                 + '&item8_id=' + document.getElementById('private_item8_id').value
                 + '&item8_num=' + document.getElementById('private_item8_num').value
-                + '&signature=' + document.getElementById('private_mail_signature').value;
+                + '&signature=' + document.getElementById('private_mail_signature').value
+                + '&customize_awards=' + document.getElementById('private_customize_awards').value;
 
                 // alert($("#serarced-id").attr("value"));
         $.get(url, function(data) {
@@ -334,13 +344,15 @@
       function StopServer(){
         OperatorServer("Stop");
       }
-      function StopServer(){
+      function UpdateServer(){
         OperatorServer("Update");
       }
 
       function OperatorServer(cmd){
         $.get('OperatorServer.php?cmd=' + cmd, function(result) {
+            GetServerListAndRefreshUI();
             alert(result);
+
         });
       }
     </script>
@@ -377,11 +389,11 @@
     display: none;
     position: absolute;
     left:50%;
-    margin-left:-310px;
+    margin-left:-320px;
     top:50%;
-    margin-top:-270px;
-    width: 620px;
-    height: 540px;
+    margin-top:-340px;
+    width: 640px;
+    height: 680px;
     padding: 20px;
     border: 5px solid orange;
     background-color: white;
@@ -431,10 +443,10 @@
     <div id='send-mail' style="float:top; margin-left: 10px; margin-top: 10px; display:none;">
       <!-- <form method="GET"> -->
         开始时间：<input type="date" id="mail_beginedate" /><br>
-        结束时间：<input type="date" id="mail_enddate" /><br><br>
+        结束时间：<input type="date" id="mail_enddate" /><font color="red">*不能和开始时间相同</font><br><br>
         邮件标题：<input type="text" id="mail_title" placeholder="输入邮件标题"/><br><br>
         邮件内容: <br>
-       <textarea name="content" id="mail_content" style="width:200px;height:80px;" placeholder="输入邮件内容"/></textarea><br/><br>
+       <textarea name="content" id="mail_content" style="width:200px;height:80px;" placeholder="输入邮件内容"/></textarea><br><br>
        物品1：
        <input type="text" id="item1_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品1类型"/>
        <input type="text" id="item1_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品1id"/>
@@ -467,6 +479,8 @@
        <input type="text" id="item8_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8类型"/>
        <input type="text" id="item8_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8id"/>
        <input type="text" id="item8_num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8数量"/><br>
+       <font color="red">**高级功能，直接发送一大堆物品（注：奖励最多支持1024个字符，不熟悉格式者慎用）</font><br>
+       <textarea name="awards" id="customize_awards" style="width:200px;height:80px;" onkeyup="AwardsLimitLength(this)" maxlength="1024" placeholder="type:id:num|type:id:num..."/></textarea><br><br>
        落款：<input type="text" name="signature" id="mail_signature" placeholder="落款"/><br><br>
        <button onclick="ReqrestSendMail()">发送</button>
       <!-- </form> -->
@@ -484,9 +498,9 @@
               消失时间：<input type="datetime-local" id="activite0_stopdate" /><br><br>
               活动标题：<input type="text" id="activite0_title" placeholder="输入活动标题"/><br><br>
               活动内容: <br>
-              <textarea name="content" id="activite0_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br/><br>
+              <textarea name="content" id="activite0_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br><br>
               活动参数：<br>
-              <textarea name="content" id="activite0_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br/><br>
+              <textarea name="content" id="activite0_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br><br>
               <button onclick="ReqrestSetActivities0()">提交修改</button>
               <!-- </form> -->
             </div>
@@ -500,9 +514,9 @@
               消失时间：<input type="datetime-local" id="activite1_stopdate" /><br><br>
               活动标题：<input type="text" id="activite1_title" placeholder="输入活动标题"/><br><br>
               活动内容: <br>
-              <textarea name="content" id="activite1_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br/><br>
+              <textarea name="content" id="activite1_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br><br>
               活动参数：<br>
-              <textarea name="content" id="activite1_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br/><br>
+              <textarea name="content" id="activite1_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br><br>
               <button onclick="ReqrestSetActivities1()">提交修改</button>
               <!-- </form> -->
             </div>
@@ -516,9 +530,9 @@
               消失时间：<input type="datetime-local" id="activite2_stopdate" /><br><br>
               活动标题：<input type="text" id="activite2_title" placeholder="输入活动标题"/><br><br>
               活动内容: <br>
-              <textarea name="content" id="activite2_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br/><br>
+              <textarea name="content" id="activite2_content" style="width:256px;height:80px;" placeholder="输入活动内容"/></textarea><br><br>
               活动参数：<br>
-              <textarea name="content" id="activite2_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br/><br>
+              <textarea name="content" id="activite2_params" style="width:256px;height:80px;" placeholder="活动参数"/></textarea><br><br>
               <button onclick="ReqrestSetActivities2()">提交修改</button>
               <!-- </form> -->
             </div>
@@ -544,7 +558,7 @@
     <form action="login.php" method="GET">
         用户名：<input type="text" name="username" /><br>
         密&emsp;码：<input type="password" name="password" />
-        <br/><br/>
+        <br><br>
         <input type="submit" value="登录">
         <a href = "javascript:void(0)" onclick = "CancelLoginBtnClick()">取消</a>
     </form>
@@ -554,10 +568,10 @@
   <div id="private-mail" class="mail_content">
     <div>发送私人邮件</div>
     开始时间：<input type="date" id="private_mail_beginedate" /><br>
-    结束时间：<input type="date" id="private_mail_enddate" /><br><br>
+    结束时间：<input type="date" id="private_mail_enddate" /><font color="red">*不能和开始时间相同</font><br><br>
     邮件标题：<input type="text" id="private_mail_title" placeholder="输入邮件标题"/><br><br>
     邮件内容: <br>
-    <textarea name="content" id="private_mail_content" style="width:200px;height:80px;" placeholder="输入邮件内容"/></textarea><br/><br>
+    <textarea name="content" id="private_mail_content" style="width:200px;height:80px;" placeholder="输入邮件内容"/></textarea><br><br>
     物品1：
     <input type="text" id="private_item1_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品1类型"/>
     <input type="text" id="private_item1_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品1id"/>
@@ -590,8 +604,10 @@
     <input type="text" id="private_item8_type" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8类型"/>
     <input type="text" id="private_item8_id" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8id"/>
     <input type="text" id="private_item8_num" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="物品8数量"/><br>
+    <font color="red">**高级功能，直接发送一大堆物品（注：奖励最多支持1024个字符，不熟悉格式者慎用）</font><br>
+    <textarea name="awards" id="private_customize_awards" style="width:200px;height:80px;" onkeyup="AwardsLimitLength(this)"  maxlength="1024" placeholder="type:id:num|type:id:num..."/></textarea><br><br>
     落款：<input type="text" name="signature" id="private_mail_signature" placeholder="落款"/><br><br>
-    <button onclick="ReqrestSendPrivateMail()">发送</button>&nbsp;&nbsp;
+    <button onclick="ReqrestSendPrivateMail()">发送</button>
     <a href = "javascript:void(0)" onclick = "CancelSendPrivateMail()">取消</a>
   </div>
 

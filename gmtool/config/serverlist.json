@@ -1,65 +1,112 @@
 {
 	"ServerList": [{
 			"Id": 1,
-			"Url": "http://192.168.2.150:4568/Toba/GMServers",
-			"Name": "送审服",
+			"Url": "http://111.231.136.90:4568/Toba/GMServers",
+			"Name": "外网测试服:111.231.136.90",
 			"Servers":[{
+					"Show":"网关 001",
 					"Name":"agentd_001",
 					"Type":1
 				},{
+					"Show":"中心 001",
 					"Name":"center_001",
 					"Type":2
 				},{
+					"Show":"登录 001",
 					"Name":"LOGINSERVER_001",
 					"Type":3
 				},{
+					"Show":"游戏 001",
 					"Name":"WORLDSERVER_001",
 					"Type":4
 				},{
+					"Show":"匹配 001",
 					"Name":"MATCHSERVER_001",
 					"Type":5
 				},{
+					"Show":"战斗 001",
 					"Name":"BATTLESERVER_001",
 					"Type":6
 				}]
 		},{
 			"Id": 2,
-			"Url": "http://192.168.2.150:4568/Toba/GMServers",
-			"Name": "龙龙",
+			"Url": "http://:4568/Toba/GMServers",
+			"Name": "WeGame测试服",
 			"Servers":[{
+					"Show":"网关 001",
 					"Name":"agentd_001",
 					"Type":1
 				},{
-					"Name":"agentd_003",
-					"Type":1
-				},{
+					"Show":"中心001",
 					"Name":"center_001",
 					"Type":2
 				},{
-					"Name":"center_003",
-					"Type":2
-				},{
+					"Show":"登录 001",
 					"Name":"LOGINSERVER_001",
 					"Type":3
 				},{
-					"Name":"LOGINSERVER_003",
-					"Type":3
-				},{
+					"Show":"游戏 001",
 					"Name":"WORLDSERVER_001",
 					"Type":4
 				},{
-					"Name":"WORLDSERVER_003",
-					"Type":4
-				},{
+					"Show":"匹配 001",
 					"Name":"MATCHSERVER_001",
 					"Type":5
 				},{
+					"Show":"战斗 001",
+					"Name":"BATTLESERVER_001",
+					"Type":6
+				}]
+		},{
+			"Id": 3,
+			"Url": "http://192.168.2.150:4568/Toba/GMServers",
+			"Name": "内网测试",
+			"Servers":[{
+					"Show":"网关 001",
+					"Name":"agentd_001",
+					"Type":1
+				},{
+					"Show":"网关 003",
+					"Name":"agentd_003",
+					"Type":1
+				},{
+					"Show":"中心001",
+					"Name":"center_001",
+					"Type":2
+				},{
+					"Show":"中心003",
+					"Name":"center_003",
+					"Type":2
+				},{
+					"Show":"登录 001",
+					"Name":"LOGINSERVER_001",
+					"Type":3
+				},{
+					"Show":"登录 003",
+					"Name":"LOGINSERVER_003",
+					"Type":3
+				},{
+					"Show":"游戏 001",
+					"Name":"WORLDSERVER_001",
+					"Type":4
+				},{
+					"Show":"游戏 003",
+					"Name":"WORLDSERVER_003",
+					"Type":4
+				},{
+					"Show":"匹配 001",
+					"Name":"MATCHSERVER_001",
+					"Type":5
+				},{
+					"Show":"匹配 003",
 					"Name":"MATCHSERVER_003",
 					"Type":5
 				},{
+					"Show":"战斗 001",
 					"Name":"BATTLESERVER_001",
 					"Type":6
 				},{
+					"Show":"战斗 003",
 					"Name":"BATTLESERVER_003",
 					"Type":6
 				}]

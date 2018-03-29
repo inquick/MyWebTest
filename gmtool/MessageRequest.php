@@ -20,14 +20,24 @@ class MessageRequest{
 
 		$SelectedServer = $_SESSION["ServerList"][$_SESSION['SelectedServer']['Id']];
 		// 先重置在线状态
-		while(list($name, $serverinfo['Servers']) = each($SelectedServer)){
+		while(list($name, $serverinfo) = each($SelectedServer['Servers'])){
 			// var_dump($serverinfo);
 			// echo '<br><br><br>';
-			$serverinfo["Online"] = false;
+			$SelectedServer['Servers'][$name]["Online"] = false;
+
+			// ob_start();
+			// var_dump($serverinfo);
+			// $result = ob_get_clean();
+			// file_put_contents("log.txt", $result, FILE_APPEND);
 		}
 
+		// ob_start();
+		// var_dump($SelectedServer);
+		// $result = ob_get_clean();
+		// file_put_contents("log.txt", $result, FILE_APPEND);
+
 		if (!$result){
-			echo "请求服务器列表失败！";
+			echo "请求服务器列表失败！<br>";
 			return;
 		}
 
@@ -36,19 +46,23 @@ class MessageRequest{
 			// 根据服务器返回信息刷新服务器在线状态
 			// var_dump($response->Server_Name);
 			if (!$response->Server_Name) {
-				echo '服务器列表为空';
+				echo '服务器列表为空<br>';
 				return;
 			}
 			while(list($index, $name) = each($response->Server_Name)){
 				if (isset($SelectedServer["Servers"][$name])) {
 					$SelectedServer["Servers"][$name]["Online"] = true;
+					echo '服务器' . $name . '在线<br>';
 				}
 			}
 
 			$_SESSION["ServerList"][$_SESSION['SelectedServer']['Id']] = $SelectedServer;
 
-			// var_dump($_SESSION["ServerList"][$_SESSION['SelectedServer']['Id']]);
-			// var_dump($result);
+			// ob_start();
+			// var_dump($SelectedServer);
+			// $result = ob_get_clean();
+			// file_put_contents("log.txt", $result, FILE_APPEND);
+
 			return;
 		}else {
 			echo $response->Result;
@@ -60,14 +74,14 @@ class MessageRequest{
 	static function GetServerOnline($url, $servername)
 	{
 		if (!isset($_SESSION['UserName'])){
-			echo '请先登录';
+			echo '请先登录<br>';
 			return;
 		}
 		$data = array('Msg_ID' => MessageID::MsgID_GetServerOnline, 'Server_Name' => $servername, );
 		$result = http_post($url, json_encode($data));
 
 		if (!$result){
-			echo "获取在线人数失败！";
+			echo "获取在线人数失败！<br>";
 			return;
 		}
 
@@ -165,13 +179,13 @@ class MessageRequest{
 		$data = array('Msg_ID' => MessageID::MsgID_SendMail,
 									'User_ID' => $userid,
 									'Server_Name' => $server,
-									'Mail_type' => $mailtype,
-									'Mail_start' => $starttime,
-									'Mail_end' => $endtime,
-									'Mail_title' => $title,
-									'Mail_content' => $content,
-									'Mail_award' => $award,
-									'Mail_signature' => $signature,);
+									'mailtype' => $mailtype,
+									'starttime' => $starttime,
+									'endtime' => $endtime,
+									'title' => $title,
+									'content' => $content,
+									'award' => $award,
+									'signature' => $signature,);
 		$result = http_post($url, json_encode($data));
 
 		var_dump(json_encode($data));
@@ -306,7 +320,7 @@ class MessageRequest{
 				$result = $server . ' 更新 ';
 				break;
 		}
-		MessageID::MsgID_StopServer
+
 		$data = array('Msg_ID' => $msgid, 'Server_Name' => $server,);
 		$resp = http_post($url, json_encode($data));
 
